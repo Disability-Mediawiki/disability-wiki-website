@@ -5,7 +5,11 @@ import { Popover, message, Alert, PageHeader, Card, Menu, Dropdown, Button, Tag,
 
 import { Input, Space, Avatar, Divider } from 'antd';
 import { UserOutlined, EyeOutlined, AudioOutlined, LoginOutlined, UserAddOutlined } from '@ant-design/icons';
-import QAService from '../../services/QAService'
+// import QAService from '../../services/QAService'
+import AuthService from '../../services/AuthService'
+import {
+    Link
+} from "react-router-dom";
 const { Item, SubMenu } = Menu;
 const { Title, Text } = Typography;
 
@@ -88,7 +92,7 @@ class HomeNav extends React.Component {
             this.loginAlert('required')
             return;
         }
-        QAService.login(this.state.username, this.state.password)
+        AuthService.login(this.state.username, this.state.password)
             .then(res => {
                 window.sessionStorage.setItem("user-config", JSON.stringify(res.data));
                 window.sessionStorage.setItem("user-name", this.state.username);
@@ -151,7 +155,8 @@ class HomeNav extends React.Component {
                     <Col span={24}>
 
                         <PageHeader
-                            title="Disability Wiki"
+                            // title="Disability Wiki"
+                            title={<Link to="/home">Disability Wiki</Link>}
                             className="site-page-header"
                             subTitle="Knowledge Graph"
                             tags={<Tag color="blue">V-1.0</Tag>}

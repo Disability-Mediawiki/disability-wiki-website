@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 // BrowserRouter
-import { HashRouter as Router, Route, Switch, Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 // import List from "../components/pages/list";
 import Files from "../components/pages/Files";
 import SideNav from "../components/layouts/Sidebar";

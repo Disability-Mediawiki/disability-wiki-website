@@ -6,7 +6,7 @@ import { Input, Space, Avatar, Divider } from 'antd';
 import { UserOutlined, EyeOutlined, AudioOutlined, LoginOutlined, UserAddOutlined } from '@ant-design/icons';
 import QAService from '../../services/QAService'
 const { Item, SubMenu } = Menu;
-const { Title, Text } = Typography;
+const { Title, Text, Link } = Typography;
 const suffix = (
     <AudioOutlined
         style={{
@@ -15,17 +15,17 @@ const suffix = (
         }}
     />
 );
-const options = [
-    {
-        value: 'Discrimination mentioned in',
-    },
-    {
-        value: 'Subtopic of CRPD Article 2',
-    },
-    {
-        value: 'What is disability',
-    },
-];
+// const options = [
+//     {
+//         value: 'Discrimination mentioned in',
+//     },
+//     {
+//         value: 'Subtopic of CRPD Article 2',
+//     },
+//     {
+//         value: 'What is disability',
+//     },
+// ];
 
 // SEARCH RESULTS TAB
 const tabList = [
@@ -42,11 +42,7 @@ const tabList = [
         tab: 'Graph',
     },
 ];
-const contentList = {
-    'Text': <p>content1</p>,
-    'Table': <p>content2</p>,
-    'Graph': <p>content3</p>,
-};
+
 
 class Search extends React.Component {
     constructor(props) {
@@ -58,7 +54,12 @@ class Search extends React.Component {
             token: "",
             loggedUserName: "",
             loggedIn: false,
-            key: 'Text'
+            key: 'Text',
+            autocomplete_options: [],
+            answered: false,
+            contentList: [],
+            textAnswer: []
+
         };
     }
 
@@ -69,15 +70,32 @@ class Search extends React.Component {
         });
     };
     componentDidMount() {
-
+        let contentList = {
+            'Text': <p>content1</p>,
+            'Table': <p>content2</p>,
+            'Graph': <p>content3</p>,
+        };
+        this.setState({ contentList })
     }
     Search = Input;
 
     onSearch = value => {
-        QAService.query(value, JSON.parse(window.sessionStorage.getItem('user-config')).accessToken)
+        QAService.query(value)
             .then(res => {
-                console.log(res.data)
                 debugger
+                console.log(res.data)
+                if (res.data && res.data.qaContexts) {
+                    let data = res.data.qaContexts.qaContext
+                    let textAnswer = []
+                    data.forEach(elem => {
+                        if (elem.label || elem.literal || elem.description) {
+                            textAnswer.push({ 'label': elem.label, 'description': elem.description, 'link': elem.links[elem.kb], 'literal': elem.literal })
+                        }
+
+                    })
+                    this.setState({ textAnswer, answered: true })
+                    console.log(this.state.textAnswer)
+                }
             })
             .catch(err => {
                 console.log(err)
@@ -86,11 +104,16 @@ class Search extends React.Component {
     }
 
     onChange = e => {
-        return
         QAService.autocomplete(e.target.value)
             .then(res => {
-                console.log(res.data)
-                debugger
+                let option = [];
+                if (res.data === "") {
+                    return;
+                }
+                res.data.forEach(elem => {
+                    option.push({ 'value': elem.key })
+                })
+                this.setState({ autocomplete_options: option })
             })
             .catch(err => {
                 console.log(err)
@@ -105,6 +128,46 @@ class Search extends React.Component {
         console.log(key, type);
         this.setState({ [type]: key });
     };
+    renderTextAnswer = () => {
+        const answer = this.state.textAnswer;
+        return (
+            <div>
+                {answer.map((text, i) => (
+                    // <Text mark style={{ fontSize: 26 }}>{this.state.textAnswer.toString()}</Text>
+                    <div style={{ border: '2px solid rgb(24 144 255)', marginTop: "2rem" }}>
+                        <Card hoverable title={<Link href={text.link} bordered target="_blank">
+                            {text.label}</Link>} key={i} bordered={false} style={{ width: '100%' }}>
+                            <Text strong style={{ fontSize: 26, color: 'rgb(24 144 255)' }}>{text.description}</Text>
+                            <Text strong style={{ fontSize: 25 }}>{text.literal}</Text>
+                        </Card>
+                    </div>
+
+
+                ))}
+            </div>
+        )
+    }
+    renderAnswer = () => {
+        let contentList = {
+            'Text': <div>
+                {this.renderTextAnswer()}
+            </div>,
+            'Table': <p>Table</p>,
+            'Graph': <p>Graph</p>,
+        };
+        return (this.state.answered) ? (<Card
+            style={{ width: '100%' }}
+            title="Answers"
+            extra={<a href="#">Train</a>}
+            tabList={tabList}
+            activeTabKey={this.state.key}
+            onTabChange={key => {
+                this.onTabChange(key, 'key');
+            }}
+        >
+            {contentList[this.state.key]}
+        </Card>) : null
+    }
     render() {
         return (
             <TweenOne>
@@ -112,7 +175,7 @@ class Search extends React.Component {
                     <Col span={24}>
                         {/* /img/dislogo-bo.jpg */}
                         {/* /img/disability-chair2.png */}
-                        <img src='/img/dislogo-bo.jpg' style={{ widht: '15rem', height: '15rem' }}></img>
+                        <img src='/img/nologo.png' style={{ widht: '15rem', height: '15rem' }}></img>
                     </Col>
                 </Row>
                 <Row>
@@ -128,7 +191,7 @@ class Search extends React.Component {
                             style={{
                                 width: '100%',
                             }}
-                            options={options}
+                            options={this.state.autocomplete_options}
                             placeholder=""
                             filterOption={(inputValue, option) =>
                                 option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
@@ -153,8 +216,9 @@ class Search extends React.Component {
                 <Row>
                     <Col span={6}></Col>
                     <Col span={12}>
-                        <Card title="Examples" bordered={false} style={{ width: '100%' }}>
-                            <p><Text code>What is discrimination</Text>,
+                        {
+                            (!this.state.answered) ? <Card title="Examples" bordered={false} style={{ width: '100%' }}>
+                                <p ><Text code >What is discrimination</Text>,
                                 <Text keyboard>What is discrimination according to wikidata</Text>,
                                 <Text keyboard>What is disabiilty rights</Text>,
                                 <Text keyboard>Health definition according to CRPD Article 25</Text>,
@@ -163,26 +227,31 @@ class Search extends React.Component {
                                 <Text keyboard>Disability wikibase definition about health </Text>,
                                 <Text keyboard>What is prevention of life  </Text>,
                             </p>
-                        </Card>
+                            </Card> : null
+                        }
 
                     </Col>
+                    {/* <Col span={12}>
+                        {
+                            (!this.state.answered) ? <Card title="Examples" bordered={false} style={{ width: '100%' }}>
+                                <p ><Text code ><p style={{ color: 'black' }}>What is discrimination ,
+                                What is discrimination according to wikidata, What is disabiilty rights,Health definition according to CRPD Article 25,
+                                Text from DRPI document,Text from CRPD Article 12,Disability wikibase definition about health,
+                                 What is prevention of life </p></Text>
+
+                                </p>
+                            </Card> : null
+                        }
+
+                    </Col> */}
                     <Col span={6}></Col>
                 </Row>
                 <Row>
                     <Col span={6}></Col>
                     <Col span={12}>
-                        <Card
-                            style={{ width: '100%' }}
-                            title="Answers"
-                            extra={<a href="#">Train</a>}
-                            tabList={tabList}
-                            activeTabKey={this.state.key}
-                            onTabChange={key => {
-                                this.onTabChange(key, 'key');
-                            }}
-                        >
-                            {contentList[this.state.key]}
-                        </Card>
+                        {
+                            this.renderAnswer()
+                        }
                     </Col>
                     <Col span={6}></Col>
                 </Row>
