@@ -12,6 +12,8 @@ import {
     MenuFoldOutlined
 } from '@ant-design/icons';
 import UploadFile from '../components/pages/Upload';
+import FileUpload from '../components/pages/FileUpload';
+import UploadRequest from '../components/pages/UploadRequest';
 
 const { Header, Sider, Content } = Layout;
 
@@ -55,9 +57,11 @@ const ApplicationRoutes = () => {
                             {/* <Route path="/list" component={List} /> */}
                             {/* <Route path="/form" component={Form} /> */}
                             <Route path="/files" component={Files} />
-                            <Route path="/Upload" component={UploadFile} />
+                            <Route path="/Upload" component={FileUpload} />
+                            {/* <Route path="/Upload" component={UploadFile} /> */}
                             {/* <Route path="/videos" component={Videos} /> */}
-                            <Redirect to="/Upload" from="/" />
+                            <Route path="/request" component={UploadRequest} />
+                            <Redirect to="/Upload" from="/admin" />
                         </Switch>
                     </Content>
                 </Layout>

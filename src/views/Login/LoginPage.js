@@ -47,9 +47,9 @@ const LoginPage = (props) => {
   const { ...rest } = props;
 
   const handleLoginClick = (e) => {
-    // history.push('/admin')
-    console.log(textValues)
-    debugger
+    history.push('/admin')
+    // console.log(textValues)
+    // debugger
   }
   const handleForgotPasswordClick = (e) => {
 

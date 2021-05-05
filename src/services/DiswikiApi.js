@@ -11,6 +11,19 @@ class DiswikiApi {
         })
 
     }
+    fileUpload(formData) {
+        const config = {
+
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Access-Control-Allow-Origin': '*',
+            }
+        }
+        return axios.post(`http://localhost:5000/api/file/upload`, formData,
+            // config
+        )
+
+    }
 
 }
 

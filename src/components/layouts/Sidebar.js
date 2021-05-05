@@ -25,6 +25,9 @@ const SideNav = (props) => {
     const handleFileClick = () => {
         history.push('/files');
     }
+    const handleRequestClick = () => {
+        history.push('/request');
+    }
 
     return (
         <div>
@@ -43,13 +46,14 @@ const SideNav = (props) => {
                     <UploadOutlined />
                     <span> Upload</span>
                 </Menu.Item>
-                {/* <Menu.Item key="2" onClick={handleVideosClick}>
-                    <VideoCameraOutlined />
-                    <span> Videos</span>
-                </Menu.Item> */}
+
                 <Menu.Item key="3" onClick={handleFileClick}>
                     <SolutionOutlined />
                     <span> Results</span>
+                </Menu.Item>
+                <Menu.Item key="4" onClick={handleRequestClick}>
+                    <SolutionOutlined />
+                    <span> Request</span>
                 </Menu.Item>
             </Menu>
         </div>

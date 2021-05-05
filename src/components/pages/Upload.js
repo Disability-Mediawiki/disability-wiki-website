@@ -19,7 +19,8 @@ const UploadFile = () => {
         //     return file.type === 'image/png' ? true : false
         // },
         name: 'file',
-        action: 'http://localhost:8080/api/file/upload',
+        // action: 'http://localhost:8080/api/file/upload',
+        action: 'http://localhost:5000/api/file',
 
         // headers: {
         //     authorization: 'authorization-text'

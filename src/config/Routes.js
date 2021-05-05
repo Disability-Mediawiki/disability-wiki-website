@@ -7,7 +7,7 @@ import {
     Link
 } from "react-router-dom";
 import SearchHome from '../components/search/SearchHome'
-import Home from '../components/Home'
+// import Home from '../components/Home'
 import ApplicationRoutes from './ApplicationRoutes'
 import { createBrowserHistory } from "history";
 import MainView from '../views/MainView'
@@ -26,17 +26,27 @@ const WithContainer = () => (
     </div>
 
 )
+const AdminPannel = () => (
+    // <div className="container">
+    /* Wrap routes in container div */
+
+    // </div>
+    <ApplicationRoutes />
+
+)
 
 const RootMain = () => (
     <main>
         <Router history={hist}>
             <Switch>
-                <Route exact path='/home' component={Home} />
-                <Route exact path='/admin' component={ApplicationRoutes} />
+                {/* <Route exact path='/home' component={Home} /> */}
+                {/* <Route exact path='/admin' component={ApplicationRoutes} /> */}
                 <Route exact path='/login' component={LoginPage} />
                 <Route exact path='/wiki_search' component={SearchResult} />
+                <Route exact path="/search" component={SearchHome} />
+                {/* <Route component={WithContainer} />  */}
+
                 <Route exact path='/' component={MainView} />
-                <Route component={WithContainer} /> {/* No match route */}
             </Switch>
         </Router>
     </main>

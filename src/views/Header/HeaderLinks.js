@@ -49,14 +49,16 @@ export default function HeaderLinks(props) {
         </Button>
       </ListItem>
       <ListItem className={classes.listItem}>
-        <Button
+
+        {/* <Button
           href="/search"
           color="transparent"
           target="_blank"
           className={classes.navLink}
-        >
-          <SearchIcon className={classes.icons} /> QAnswer
-        </Button>
+        > */}
+
+        {/* <SearchIcon className={classes.icons} /> QAnswer */}
+        {/* </Button> */}
       </ListItem>
       <ListItem className={classes.listItem}>
         <CustomDropdown
@@ -153,6 +155,17 @@ export default function HeaderLinks(props) {
           <LockOpenIcon className={classes.icons} /> Admin
         </Button>
       </ListItem> */}
+      <ListItem className={classes.listItem}>
+        <Button
+          color="transparent"
+          className={classes.navLink}
+        >
+          <Link to="/search" color="transparent">
+            <SearchIcon color="transparent" className={classes.icons} />
+            QAnswer
+        </Link>
+        </Button>
+      </ListItem>
       <ListItem className={classes.listItem}>
         <Button
           color="transparent"

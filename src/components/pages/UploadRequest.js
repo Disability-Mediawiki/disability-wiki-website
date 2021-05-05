@@ -2,21 +2,36 @@ import React, { useEffect, useState } from 'react';
 import { Table, Row, Col, Button, Tooltip, Typography } from 'antd';
 import { useHistory } from 'react-router';
 import axios from 'axios';
-import { Menu, Dropdown } from 'antd';
+import { Menu, Dropdown, Popconfirm } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import { SearchOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import EditableTable from '../layouts/TableLayout'
 
 const { Title } = Typography;
 
-const Files = () => {
+const UploadRequest = () => {
     const history = useHistory();
     const [allData, setAllData] = useState([]);
     const [tableData, setTableData] = useState([]);
     const [fileList, setFileList] = useState([]);
+
     useEffect(() => {
         getFiles();
+        setTableData([
+            {
+                'username': 'testUser',
+                'filename': 'convention.pdf',
+                'datetime': '04/22/2021+GMT3:00',
+                'status': 'pending',
+            },
+            {
+                'username': 'testUser',
+                'filename': 'convention.pdf',
+                'datetime': '04/22/2021+GMT3:00',
+                'status': 'pending',
+            },
 
+        ])
     }, []);
     const getFiles = () => {
         axios.get(`http://localhost:8080/api/file/list`)
@@ -29,18 +44,45 @@ const Files = () => {
     }
     const columns = [
         {
-            title: 'Label',
-            dataIndex: 'label',
+            title: 'UserName',
+            dataIndex: 'username',
         },
         {
-            title: 'Paragraph',
-            dataIndex: 'paragraph'
+            title: 'File Name',
+            dataIndex: 'filename'
         },
         {
-            title: 'Feedback',
-            dataIndex: 'action'
+            title: 'Uploaded time',
+            dataIndex: 'datetime'
+        },
+        {
+            title: 'Status',
+            dataIndex: 'status'
+        },
+        {
+            title: 'Action',
+            dataIndex: 'action',
+            // render: (_, record) =>
+            //     tableData.length >= 1 ? (
+            //         <div>
+
+            //             <Popconfirm style={{ marginLeft: '1rem' }} title="Sure to delete?" onConfirm={() => console.log(record)}>
+            //                 <a>Aprove</a>
+            //             </Popconfirm>
+            //             <Popconfirm title="Sure to delete?" onConfirm={() => console.log(record)}>
+            //                 <a>Delete</a>
+            //             </Popconfirm>
+
+            //         </div>
+            //     ) : null,
+            render: (_, record) =>
+                tableData.length >= 1 ?
+                    getActionButton(record)
+                    : null,
         }
     ];
+
+
 
     const data = [{
     }];
@@ -55,20 +97,20 @@ const Files = () => {
         })
         return data;
     });
-
     const getActionButton = (key) => {
         return (
             <Row>
-                <Tooltip title="Correct" >
+                <Tooltip title="Approve" >
                     <Button shape="circle" style={{ color: "green" }} icon={<CheckCircleOutlined />} />
                 </Tooltip>
-                <Tooltip title="Wrong" style={{ marginLeft: "3rem" }}>
+                <Tooltip title="Delete" style={{ marginLeft: "3rem" }}>
                     <Button shape="circle" style={{ color: "red" }} icon={<CloseCircleOutlined />} />
                 </Tooltip>
             </Row>
 
         )
     }
+
     const getFileResult = (fileName) => {
         if (!fileName) return;
         axios.get(`http://localhost:8080/api/file/download`,
@@ -115,8 +157,8 @@ const Files = () => {
             <Row gutter={[40, 0]}>
                 <Col span={20}>
                     <Title level={2}>
-                        Results
-            </Title>
+                        Upload Request
+                    </Title>
                 </Col>
                 <Col span={2}>
                     {/* <Button onClick={handleClick} block>Add User</Button> */}
@@ -127,18 +169,13 @@ const Files = () => {
                     </Dropdown.Button>
                 </Col>
             </Row>
-            {/* <Row gutter={[40, 0]}>
-                <Col span={24}>
-                    <Table columns={columns} dataSource={tableData} />
-                </Col>
-            </Row> */}
             <Row gutter={[40, 0]}>
                 <Col span={24}>
-                    <EditableTable />
+                    <Table columns={columns} dataSource={tableData} />
                 </Col>
             </Row>
         </div>
     );
 }
 
-export default Files;
+export default UploadRequest;

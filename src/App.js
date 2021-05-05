@@ -1,8 +1,8 @@
 import logo from './logo.svg';
 import './App.css';
-// import ApplicationRoutes from "./config/ApplicationRoutes";
+import ApplicationRoutes from "./config/ApplicationRoutes";
 import HomeNav from "./components/layouts/HomeNav";
-import Home from "./components/Home";
+// import Home from "./components/Home";
 import RootMain from "./config/Routes";
 import Header from "./views/Header/Header";
 import HeaderLinks from "./views/Header/HeaderLinks";
@@ -29,7 +29,7 @@ function App() {
       {/* <HomeNav /> */}
 
       <RootMain />
-
+      <ApplicationRoutes />
     </div>
   );
 }
