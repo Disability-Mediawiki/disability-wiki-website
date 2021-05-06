@@ -34,6 +34,9 @@ import TableRow from '@material-ui/core/TableRow';
 //
 import Pagination from '@material-ui/lab/Pagination';
 
+// core components
+import Header from "../Header/Header.js";
+import HeaderLinks from "../Header/HeaderLinks.js"
 const searchStyle = makeStyles((theme) => ({
     root: {
         padding: '12px ',
@@ -180,6 +183,15 @@ const SearchResult = (props) => {
 
     return (
         <div>
+            <Header
+                absolute
+                color="transparent"
+                brand="Disability Wiki Project"
+                onClick={() => console.log('logo clicked')}
+                // onLeftIconButtonClick={() => handleLogoClick}
+                rightLinks={<HeaderLinks />}
+                {...rest}
+            />
             <div style={{ paddingTop: '3rem' }}>
                 <div className={classes.exploreRoot}>
                     <Grid container spacing={3}>

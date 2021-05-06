@@ -26,6 +26,8 @@ const FileUpload = (props) => {
                 debugger
                 setUploading(false)
                 message.success(`${res.data.filename} file uploaded successfully`);
+                fileList.pop()
+                setFileList(fileList)
             })
             .catch(err => {
                 console.log(err)

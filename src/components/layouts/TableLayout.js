@@ -1,5 +1,10 @@
 import React, { useContext, useState, useEffect, useRef } from 'react';
-import { Table, Input, Button, Popconfirm, Form, Row, Col } from 'antd';
+import { Table, Input, Button, Popconfirm, Form, Row, Col, Badge, Card, Modal } from 'antd';
+import DiswikiApi from '../../services/DiswikiApi'
+import Chip from '@material-ui/core/Chip';
+import Avatar from '@material-ui/core/Avatar';
+import AddBoxIcon from '@material-ui/icons/AddBox';
+import TextField from '@material-ui/core/TextField';
 const EditableContext = React.createContext(null);
 
 const EditableRow = ({ index, ...props }) => {
@@ -87,64 +92,126 @@ export default class EditableTable extends React.Component {
         super(props);
         this.columns = [
             {
-                title: 'Subject',
-                dataIndex: 'name',
-                width: '30%',
+                title: 'Paragraph',
+                dataIndex: 'paragraph',
+                width: '60%',
                 editable: true,
             },
             {
-                title: 'Predicate',
-                dataIndex: 'age',
-                editable: true,
-            },
-            {
-                title: 'Object',
-                dataIndex: 'address',
-                editable: true,
+                title: 'Tags',
+                dataIndex: 'tags',
+                editable: false,
+                render: (_, record) =>
+                    this.state.dataSource.length >= 0 && record.tags ? record.tags.map((tag, i) => {
+                        return i < record.tags.length - 1 ?
+                            (
+                                <Chip
+                                    avatar={<Avatar>T</Avatar>}
+                                    label={tag.text}
+                                    key={i}
+                                    clickable
+                                    color={(tag.new) ? "secondary" : 'primary'}
+                                    onDelete={e => this.handleTagDelete(record, tag)}
+                                    // deleteIcon={<DoneIcon />}
+                                    style={{ marginRight: '0.5rem', marginBottom: '0.5rem' }}
+                                />) : (
+                                <span>
+                                    <Chip
+                                        avatar={<Avatar>T</Avatar>}
+                                        label={tag.text}
+                                        key={i}
+                                        clickable
+                                        color={(tag.new) ? "secondary" : 'primary'}
+                                        onDelete={e => this.handleTagDelete(record, tag)}
+                                        // deleteIcon={<DoneIcon />}
+                                        style={{ marginRight: '0.5rem', marginBottom: '0.5rem' }}
+                                    />,
+                                    <Chip
+
+                                        label="Add Tag"
+                                        key={i}
+                                        clickable
+                                        icon={<AddBoxIcon />}
+                                        variant="outlined"
+                                        color="primary"
+                                        onClick={e => this.handleTagAdd(record, tag)}
+                                        // deleteIcon={<DoneIcon />}
+                                        style={{ marginRight: '0.5rem', marginBottom: '0.5rem' }}
+                                    />
+                                </span>
+                            )
+
+                    }) : null,
             },
             {
                 title: 'Action',
                 dataIndex: 'operation',
                 render: (_, record) =>
-                    this.state.dataSource.length >= 1 ? (
-                        <Popconfirm title="Sure to delete?" onConfirm={() => this.handleDelete(record.key)}>
-                            <a>Delete</a>
+                    this.state.dataSource.length >= 0 ? (
+                        <Popconfirm title="Sure to delete?" onConfirm={() => this.handleDelete(record)}>
+                            <a>Delete Row</a>
                         </Popconfirm>
                     ) : null,
             },
         ];
+
         this.state = {
-            dataSource: [
-                {
-                    key: '0',
-                    name: 'Edward King 0',
-                    age: '32',
-                    address: 'London, Park Lane no. 0',
-                },
-                {
-                    key: '1',
-                    name: 'Edward King 1',
-                    age: '32',
-                    address: 'London, Park Lane no. 1',
-                },
-            ],
-            count: 2,
+            dataSource: [],
+            count: 0,
+            isModalVisible: false,
+            newTagName: '',
+            selectedRow: null,
         };
+        this.getClassifiedResults('gf')
     }
 
-    handleDelete = (key) => {
+
+    getClassifiedResults = (fileName) => {
+        if (!fileName) return;
+        DiswikiApi.getClassificationResult('classified 2.csv')
+            .then(res => {
+                let tbData = []
+                if (res.status === 200) {
+                    res.data.forEach(data => {
+                        tbData.push({
+                            "tags": data.tag,
+                            "paragraph": data.paragraph
+                        })
+                    })
+                    this.setState({ 'dataSource': tbData, 'count': tbData.length });
+                }
+            })
+            .catch(err => console.warn(err));
+    }
+    componentDidUpdate() {
+        // this.state = {
+        //     dataSource: this.props.tableData,
+        //     count: this.props.tableData.length,
+        // };
+    }
+    handleTagDelete = (record, tag) => {
+        debugger
+        const dataSource = [...this.state.dataSource];
+        let index = dataSource.indexOf(record);
+        dataSource[index].tags = dataSource[index].tags.filter((item) => item !== tag)
+        this.setState({
+            dataSource: dataSource,
+        });
+    }
+    handleTagAdd = (record, tag) => {
+        this.setState({ isModalVisible: true, selectedRow: record })
+    }
+    handleDelete = (record) => {
         const dataSource = [...this.state.dataSource];
         this.setState({
-            dataSource: dataSource.filter((item) => item.key !== key),
+            dataSource: dataSource.filter((item) => item !== record),
         });
     };
     handleAdd = () => {
         const { count, dataSource } = this.state;
         const newData = {
-            key: count,
-            name: `Edward King ${count}`,
-            age: '32',
-            address: `London, Park Lane no. ${count}`,
+            paragraph: `paragraph`,
+            tags: ['tags']
         };
         this.setState({
             dataSource: [...dataSource, newData],
@@ -160,7 +227,27 @@ export default class EditableTable extends React.Component {
             dataSource: newData,
         });
     };
+    handleTagNameChange = (e) => {
+        this.setState({ newTagName: e.target.value })
+    }
+    changeModalVisibleState() {
+        this.setState({ isModalVisible: !this.state.isModalVisible })
+    }
+    handleAddNewTagOk = () => {
+        debugger
+        this.setState({ isModalVisible: false })
+        const dataSource = [...this.state.dataSource];
+        let index = dataSource.indexOf(this.state.selectedRow);
+        dataSource[index].tags.push({ 'text': this.state.newTagName, 'new': true })
+        console.log(dataSource[index].tags)
+        this.setState({
+            dataSource
+        });
+    };
 
+    handleCancel = () => {
+        this.setState({ isModalVisible: false })
+    };
     render() {
         const { dataSource } = this.state;
         const components = {
@@ -203,12 +290,16 @@ export default class EditableTable extends React.Component {
                 </Row>
 
                 <Table
+                    pagination={{ pageSize: 2 }}
                     components={components}
                     rowClassName={() => 'editable-row'}
                     bordered
                     dataSource={dataSource}
                     columns={columns}
                 />
+                <Modal title="Add new tag" visible={this.state.isModalVisible} onOk={this.handleAddNewTagOk} onCancel={this.handleCancel}>
+                    <TextField name="tag-name" label="Tag name" variant="outlined" value={this.state.newTagName} onChange={this.handleTagNameChange} style={{ width: '100%' }} />
+                </Modal>
             </div>
         );
     }

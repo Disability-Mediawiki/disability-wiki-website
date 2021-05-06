@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Row, Col, Button, Tooltip, Typography } from 'antd';
+import { Table, Row, Col, Button, Tooltip, Typography, Input, Popconfirm, Form } from 'antd';
 import { useHistory } from 'react-router';
 import axios from 'axios';
 import { Menu, Dropdown } from 'antd';
@@ -9,15 +9,46 @@ import EditableTable from '../layouts/TableLayout'
 
 const { Title } = Typography;
 
-const Files = () => {
+const DocumentResult = () => {
     const history = useHistory();
     const [allData, setAllData] = useState([]);
     const [tableData, setTableData] = useState([]);
     const [fileList, setFileList] = useState([]);
     useEffect(() => {
         getFiles();
+        // getFileResult('asd');
 
     }, []);
+
+    const tableColumns = [
+        {
+            title: 'Paragraph',
+            dataIndex: 'paragraph',
+            width: '60%',
+            editable: true,
+        },
+        {
+            title: 'Tags',
+            dataIndex: 'tags',
+            editable: true,
+        },
+        {
+            title: 'Object',
+            dataIndex: 'address',
+            editable: true,
+        },
+        {
+            title: 'Action',
+            dataIndex: 'operation',
+            render: (_, record) =>
+                tableData.length == 0 ? (
+                    <Popconfirm title="Sure to delete?" onConfirm={() => this.handleDelete(record.key)}>
+                        <a>Delete</a>
+                    </Popconfirm>
+                ) : null,
+        },
+    ];
+
     const getFiles = () => {
         axios.get(`http://localhost:8080/api/file/list`)
             .then(response => {
@@ -70,19 +101,20 @@ const Files = () => {
         )
     }
     const getFileResult = (fileName) => {
+        debugger
         if (!fileName) return;
-        axios.get(`http://localhost:8080/api/file/download`,
-            { params: { 'fileName': fileName } })
+        axios.get(`http://localhost:5000/api/file/download`,
+            { params: { 'file_name': 'classified 2.csv' } })
             .then(res => {
                 let tbData = []
                 if (res.status === 200) {
-                    for (let key in res.data.result) {
+                    res.data.forEach(data => {
                         tbData.push({
-                            "label": res.data.result[key].join(),
-                            "paragraph": key,
-                            "action": getActionButton(key)
+                            "tags": data.tag,
+                            "paragraph": data.paragraph,
+                            // "action": getActionButton(key)
                         })
-                    }
+                    })
                     setTableData(tbData);
                 }
             })
@@ -134,11 +166,11 @@ const Files = () => {
             </Row> */}
             <Row gutter={[40, 0]}>
                 <Col span={24}>
-                    <EditableTable />
+                    <EditableTable columns={tableColumns} tableData={tableData} />
                 </Col>
             </Row>
         </div>
     );
 }
 
-export default Files;
+export default DocumentResult;

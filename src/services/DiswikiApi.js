@@ -24,6 +24,14 @@ class DiswikiApi {
         )
 
     }
+    getClassificationResult(fileName) {
+        return axios.get(`http://localhost:5000/api/file/download`,
+            { params: { 'file_name': fileName } })
+    }
+    getClassificationResult(fileName) {
+        return axios.get(`http://localhost:5000/api/file/download`,
+            { params: { 'file_name': fileName } })
+    }
 
 }
 

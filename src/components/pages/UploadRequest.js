@@ -46,6 +46,7 @@ const UploadRequest = () => {
         {
             title: 'UserName',
             dataIndex: 'username',
+            editable: true,
         },
         {
             title: 'File Name',

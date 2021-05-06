@@ -29,7 +29,7 @@ function App() {
       {/* <HomeNav /> */}
 
       <RootMain />
-      <ApplicationRoutes />
+      {/* <ApplicationRoutes /> */}
     </div>
   );
 }

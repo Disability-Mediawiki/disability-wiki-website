@@ -40,7 +40,7 @@ const RootMain = () => (
         <Router history={hist}>
             <Switch>
                 {/* <Route exact path='/home' component={Home} /> */}
-                {/* <Route exact path='/admin' component={ApplicationRoutes} /> */}
+                <Route exact path='/admin' component={ApplicationRoutes} />
                 <Route exact path='/login' component={LoginPage} />
                 <Route exact path='/wiki_search' component={SearchResult} />
                 <Route exact path="/search" component={SearchHome} />

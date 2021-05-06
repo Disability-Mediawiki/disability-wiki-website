@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 // BrowserRouter
 import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
 // import List from "../components/pages/list";
-import Files from "../components/pages/Files";
+import DocumentResult from "../components/pages/DocumentResult";
 import SideNav from "../components/layouts/Sidebar";
 // import File from "../components/pages/files";
 // import Videos from "../components/pages/videos";
@@ -56,7 +56,7 @@ const ApplicationRoutes = () => {
                         <Switch>
                             {/* <Route path="/list" component={List} /> */}
                             {/* <Route path="/form" component={Form} /> */}
-                            <Route path="/files" component={Files} />
+                            <Route path="/files" component={DocumentResult} />
                             <Route path="/Upload" component={FileUpload} />
                             {/* <Route path="/Upload" component={UploadFile} /> */}
                             {/* <Route path="/videos" component={Videos} /> */}
