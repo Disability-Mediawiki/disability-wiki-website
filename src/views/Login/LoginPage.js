@@ -31,13 +31,16 @@ import styles from "../assets/jss/material-kit-react/views/loginPage.js";
 import Link from '@material-ui/core/Link';
 // import image from "assets/img/bg7.jpg";
 // import image from "/img/blog-work-dis.png";
-
+import DiswikiApi from '../../services/DiswikiApi';
+import AuthService from '../../services/AuthService';
 const useStyles = makeStyles(styles);
 
 const LoginPage = (props) => {
   const [cardAnimaton, setCardAnimation] = React.useState("cardHidden");
 
-  const [textValues, setTextValues] = useState({ 'userName': '', 'password': '', 'showPassword': false })
+  const [userName, setUserName] = useState('')
+  const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
 
   let history = useHistory();
   setTimeout(function () {
@@ -48,17 +51,25 @@ const LoginPage = (props) => {
 
   const handleLoginClick = (e) => {
     history.push('/admin')
-    // console.log(textValues)
+    // if (userName && password) {
+    //   AuthService.login_dis_wiki(userName, password)
+    //     .then(res => {
+    //       window.sessionStorage.setItem("userConfig", JSON.stringify(res.data));
+    //       window.sessionStorage.setItem("userName", res.data.username);
+    //       history.push('/admin')
+    //     })
+    //     .catch(err => console.log(err))
+    // }
     // debugger
   }
   const handleForgotPasswordClick = (e) => {
 
   }
   const handleEmailChange = (e) => {
-    setTextValues({ 'userName': e.target.value })
+    setUserName(e.target.value)
   }
   const handlePasswordChange = (e) => {
-    setTextValues({ 'password': e.target.value })
+    setPassword(e.target.value)
   }
   const handleLogoClick = (e) => {
     debugger
@@ -66,21 +77,12 @@ const LoginPage = (props) => {
   }
   const handleClickShowPassword = (e) => {
     debugger
-    setTextValues({ 'showPassword': !textValues.showPassword });
+    setShowPassword(!showPassword);
   }
 
 
   return (
     <div>
-      <Header
-        absolute
-        color="transparent"
-        brand="Disability Wiki Project"
-        onClick={() => handleLogoClick}
-        // onLeftIconButtonClick={() => handleLogoClick}
-        rightLinks={<HeaderLinks />}
-        {...rest}
-      />
       <div
         className={classes.pageHeader}
         style={{
@@ -139,7 +141,7 @@ const LoginPage = (props) => {
                       type='email'
                       style={{ marginTop: '1rem' }}
                       placeholder="Email"
-                      value={textValues.userName}
+                      value={userName}
                       onChange={handleEmailChange}
                       endAdornment={
                         <InputAdornment position="end">
@@ -159,8 +161,8 @@ const LoginPage = (props) => {
                       inputProps={{
                         'aria-label': 'Password',
                       }}
-                      type={textValues.showPassword ? 'text' : 'password'}
-                      value={textValues.password}
+                      type={showPassword ? 'text' : 'password'}
+                      value={password}
                       onChange={handlePasswordChange}
                       endAdornment={
                         <InputAdornment position="end">
@@ -169,7 +171,7 @@ const LoginPage = (props) => {
                             onClick={handleClickShowPassword}
                             onMouseDown={handleClickShowPassword}
                           >
-                            {textValues.showPassword ? <Visibility /> : <VisibilityOff />}
+                            {showPassword ? <Visibility /> : <VisibilityOff />}
                           </IconButton>
                         </InputAdornment>
                       }

@@ -12,21 +12,17 @@ const SideNav = (props) => {
     const history = useHistory();
     // const [collapse, setCollapse] = useState([false]);
 
-    const handleUserClick = () => {
-        history.push('/upload');
+    const handleUploadClick = () => {
+        history.push('/admin');
     }
 
-    const handleVideosClick = () => {
 
-        history.push('/videos');
-
-    }
 
     const handleFileClick = () => {
-        history.push('/files');
+        history.push('/admin/files');
     }
     const handleRequestClick = () => {
-        history.push('/request');
+        history.push('/admin/request');
     }
 
     return (
@@ -42,7 +38,7 @@ const SideNav = (props) => {
 
             </div>
             <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
-                <Menu.Item key="1" onClick={handleUserClick}>
+                <Menu.Item key="1" onClick={handleUploadClick}>
                     <UploadOutlined />
                     <span> Upload</span>
                 </Menu.Item>

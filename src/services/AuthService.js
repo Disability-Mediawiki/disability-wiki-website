@@ -11,5 +11,17 @@ class AuthService {
         let body = { 'email': email, 'password': password }
         return axios.post(`${API_HOST_DIS_WIKI}user/login`, body);
     }
+    authCheck() {
+        debugger
+        let userConfig = JSON.parse(window.sessionStorage.getItem('userConfig'))
+        // return (userConfig) ? true : false
+        return true
+    }
+
+    validateAuthAdmin() {
+        let userConfig = JSON.parse(window.sessionStorage.getItem('userConfig'))
+        return (userConfig && userConfig.sp) ? true : false
+    }
+
 }
 export default new AuthService();

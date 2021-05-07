@@ -10,7 +10,7 @@ import CardContent from '@material-ui/core/CardContent';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 
-import { useHistory } from 'react-router';
+import { useHistory } from 'react-router-dom';
 import DiswikiApi from '../../services/DiswikiApi';
 import { makeStyles } from "@material-ui/core/styles";
 import styles from "../assets/jss/material-kit-react/views/components.js";
@@ -106,9 +106,11 @@ const SearchResult = (props) => {
     const [selectedConcept, setSelectedConcept] = useState(null);
     const [pagination, setPagination] = useState({ 'status': false });
     useEffect(() => {
-        if (props.location.state.keyword) {
-            setSearchTerm(props.location.state.keyword)
-            publicSearch(props.location.state.keyword)
+        debugger
+        // console.log(porps.hostory..location.state.keyword)
+        if (history.location.state.keyword && history.location.state.keyword !== '') {
+            setSearchTerm(history.location.state.keyword)
+            publicSearch(history.location.state.keyword)
         }
 
     }, []);
@@ -183,7 +185,7 @@ const SearchResult = (props) => {
 
     return (
         <div>
-            <Header
+            {/* <Header
                 absolute
                 color="transparent"
                 brand="Disability Wiki Project"
@@ -191,8 +193,8 @@ const SearchResult = (props) => {
                 // onLeftIconButtonClick={() => handleLogoClick}
                 rightLinks={<HeaderLinks />}
                 {...rest}
-            />
-            <div style={{ paddingTop: '3rem' }}>
+            /> */}
+            <div style={{ paddingTop: '6rem' }}>
                 <div className={classes.exploreRoot}>
                     <Grid container spacing={3}>
                         <Grid item xs={12}>

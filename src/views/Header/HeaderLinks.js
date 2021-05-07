@@ -1,6 +1,6 @@
 /*eslint-disable*/
 import React from "react";
-import { useHistory } from "react-router-dom";
+import { useHistory, useRouteMatch } from "react-router-dom";
 
 import DeleteIcon from "@material-ui/icons/Delete";
 import IconButton from "@material-ui/core/IconButton";
@@ -32,10 +32,13 @@ import styles from "../assets/jss/material-kit-react/components/headerLinksStyle
 const useStyles = makeStyles(styles);
 
 export default function HeaderLinks(props) {
+  const { path, url } = useRouteMatch();
   const classes = useStyles();
   let history = useHistory();
   const handleHomeClick = (e) => {
-    history.push('/')
+    debugger
+
+    history.push(`/`)
   }
   return (
     <List className={classes.list}>
@@ -171,7 +174,7 @@ export default function HeaderLinks(props) {
           color="transparent"
           className={classes.navLink}
         >
-          <Link to="/login" color="transparent">
+          <Link to={`/login`} color="transparent">
             <AccountCircleIcon className={classes.icons} />
             Login
             </Link>

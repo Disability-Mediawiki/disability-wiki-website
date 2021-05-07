@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 // BrowserRouter
-import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, Redirect, useLocation } from "react-router-dom";
 // import List from "../components/pages/list";
 import DocumentResult from "../components/pages/DocumentResult";
 import SideNav from "../components/layouts/Sidebar";
@@ -14,13 +14,13 @@ import {
 import UploadFile from '../components/pages/Upload';
 import FileUpload from '../components/pages/FileUpload';
 import UploadRequest from '../components/pages/UploadRequest';
-
+import PrivateRouteAdmin from "./PrivateRouteAdmin";
 const { Header, Sider, Content } = Layout;
 
 
-const ApplicationRoutes = () => {
+const ApplicationRoutes = (props) => {
     const [collapse, setCollapse] = useState(false);
-
+    const location = useLocation();
     useEffect(() => {
         window.innerWidth <= 760 ? setCollapse(true) : setCollapse(false);
     }, []);
@@ -54,14 +54,20 @@ const ApplicationRoutes = () => {
                     </Header>
                     <Content style={{ margin: '24px 16px', padding: 24, minHeight: "calc(100vh - 114px)", background: "#fff" }}>
                         <Switch>
-                            {/* <Route path="/list" component={List} /> */}
-                            {/* <Route path="/form" component={Form} /> */}
-                            <Route path="/files" component={DocumentResult} />
-                            <Route path="/Upload" component={FileUpload} />
-                            {/* <Route path="/Upload" component={UploadFile} /> */}
-                            {/* <Route path="/videos" component={Videos} /> */}
-                            <Route path="/request" component={UploadRequest} />
-                            <Redirect to="/Upload" from="/admin" />
+                            {/* <Route path="/admin/files" component={DocumentResult} />
+                            <Route path="/admin" component={FileUpload} />
+                            <Route path="/admin/request" component={UploadRequest} /> */}
+                            <Route exact path="/admin/files"  >
+                                <DocumentResult history={props.history} />
+                            </Route>
+                            {/* <Route path="/admin/request" history={props.history} >
+                                <UploadRequest />
+                            </Route> */}
+                            <PrivateRouteAdmin path="/admin/request" component={UploadRequest} />
+
+                            <Route exact path="/admin" history={props.history} >
+                                <FileUpload />
+                            </Route>
                         </Switch>
                     </Content>
                 </Layout>

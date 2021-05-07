@@ -1,10 +1,11 @@
 import React from "react";
 import {
-    // BrowserRouter as Router,
-    HashRouter as Router,
+    BrowserRouter as Router,
+    // HashRouter as Router,
     Switch,
     Route,
-    Link
+    Link,
+    Redirect
 } from "react-router-dom";
 import SearchHome from '../components/search/SearchHome'
 // import Home from '../components/Home'
@@ -13,6 +14,10 @@ import { createBrowserHistory } from "history";
 import MainView from '../views/MainView'
 import SearchResult from '../views/SearchResult/SearchResult'
 import LoginPage from '../views/Login/LoginPage'
+import Header from "../views/Header/Header";
+import BodyContent from "../views/BodyContent/BodyContent";
+
+import HeaderLinks from "../views/Header/HeaderLinks";
 
 var hist = createBrowserHistory();
 
@@ -34,19 +39,20 @@ const AdminPannel = () => (
     <ApplicationRoutes />
 
 )
+const RootMain = (props) => (
 
-const RootMain = () => (
     <main>
         <Router history={hist}>
             <Switch>
-                {/* <Route exact path='/home' component={Home} /> */}
+                <Route path='/home' component={MainView} />
                 <Route exact path='/admin' component={ApplicationRoutes} />
-                <Route exact path='/login' component={LoginPage} />
+                {/* <Route exact path='/login' component={LoginPage} /> */}
                 <Route exact path='/wiki_search' component={SearchResult} />
-                <Route exact path="/search" component={SearchHome} />
+                {/* <Route exact path="/search" component={SearchHome} /> */}
                 {/* <Route component={WithContainer} />  */}
 
-                <Route exact path='/' component={MainView} />
+                {/* <Redirect to="/home" from="/" /> */}
+
             </Switch>
         </Router>
     </main>
