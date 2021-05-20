@@ -52,18 +52,8 @@ export default function HeaderLinks(props) {
         </Button>
       </ListItem>
       <ListItem className={classes.listItem}>
-
-        {/* <Button
-          href="/search"
-          color="transparent"
-          target="_blank"
-          className={classes.navLink}
-        > */}
-
-        {/* <SearchIcon className={classes.icons} /> QAnswer */}
-        {/* </Button> */}
       </ListItem>
-      <ListItem className={classes.listItem}>
+      {/* <ListItem className={classes.listItem}>
         <CustomDropdown
           noLiPadding
           buttonText="Explore"
@@ -88,14 +78,9 @@ export default function HeaderLinks(props) {
             </a>
           ]}
         />
-      </ListItem>
+      </ListItem> */}
 
       <ListItem className={classes.listItem}>
-        {/*<Tooltip title="Delete">
-          <IconButton aria-label="Delete">
-            <DeleteIcon />
-          </IconButton>
-        </Tooltip>*/}
         <Tooltip
           id="instagram-twitter"
           title="Follow us on twitter"
@@ -108,7 +93,6 @@ export default function HeaderLinks(props) {
             color="transparent"
             className={classes.navLink}
           >
-            {/* <i className={classes.socialIcons + " fab fa-twitter"} /> */}
             <i ><InstagramIcon /></i>
           </Button>
         </Tooltip>
@@ -147,23 +131,12 @@ export default function HeaderLinks(props) {
           </Button>
         </Tooltip>
       </ListItem>
-      {/* <ListItem className={classes.listItem}>
-        <Button
-          href="/admin"
-          color="transparent"
-          target="_blank"
-          className={classes.navLink}
-        >
-
-          <LockOpenIcon className={classes.icons} /> Admin
-        </Button>
-      </ListItem> */}
       <ListItem className={classes.listItem}>
         <Button
           color="transparent"
           className={classes.navLink}
         >
-          <Link to="/search" color="transparent">
+          <Link to="/wiki_search" color="transparent">
             <SearchIcon color="transparent" className={classes.icons} />
             QAnswer
         </Link>

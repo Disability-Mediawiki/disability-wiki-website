@@ -12,7 +12,8 @@ const headerLinksStyle = theme => ({
     listStyle: "none",
     paddingTop: "0",
     paddingBottom: "0",
-    color: "#074ae8"
+    color: "#074ae8",
+    // webKitTextStroke: "20px black"
   },
   listItem: {
     float: "left",

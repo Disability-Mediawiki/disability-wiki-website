@@ -56,6 +56,7 @@ import {
 } from "react-router-dom";
 import SearchHome from '../components/search/SearchHome'
 import SearchResult from './SearchResult/SearchResult'
+import QASearch from './SearchResult/QASearch'
 import LoginPage from './Login/LoginPage'
 
 import '@fontsource/roboto';
@@ -127,6 +128,7 @@ const MainView = (props) => {
     const [landingPageData, setLandingPageData] = useState({})
     const [textValues, setTextValues] = useState({ 'keyword': '', 'search': '' })
     useEffect(() => {
+
     }, []);
 
     const handleSearchClick = (event) => {
@@ -138,14 +140,7 @@ const MainView = (props) => {
             })
         }
     }
-    const handletestclick = (event) => {
 
-        console.log(props)
-        props.history.push({
-            pathname: '/login'
-        })
-
-    }
     const handleChange = (event) => {
         setTextValues({ 'search': event.target.value })
     }
@@ -156,14 +151,14 @@ const MainView = (props) => {
 
             <Header
                 // <div style={{ marginLeft: '-20rem' }}>Disability Wiki</div>
-                brand="DISABILITY RIGHTS"
+                brand="DISABILITY WIKI RIGHTS"
                 rightLinks={<HeaderLinks />}
                 fixed
 
-                color="transparent"
+                color={(window.location.href.split('/')[3] === "") ? "transparent" : 'white'}
                 changeColorOnScroll={{
                     height: 400,
-                    color: "white"
+                    color: 'white'
                 }}
                 {...rest}
             />
@@ -171,8 +166,9 @@ const MainView = (props) => {
             <Switch>
                 <Route exact path={`/`}><BodyContent /> </Route>
                 <Route exact path="/login">< LoginPage /></Route>
-                <Route exact path="/wiki_search">< SearchResult /></Route>
-                <Route exact path='/wiki_search' component={SearchResult} />
+                {/* <Route exact path="/wiki_search">< SearchResult /></Route> */}
+                {/* <Route exact path="/wiki_search">< QASearch /></Route> */}
+                <Route exact path='/wiki_search' component={QASearch} />
             </Switch>
 
 

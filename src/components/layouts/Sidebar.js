@@ -3,23 +3,32 @@ import { Menu } from 'antd';
 import {
     UserOutlined,
     SolutionOutlined,
-    VideoCameraOutlined,
+    FilePdfOutlined,
     UploadOutlined,
 } from '@ant-design/icons';
 import { useHistory } from 'react-router';
+import AuthService from '../../services/AuthService'
 
 const SideNav = (props) => {
     const history = useHistory();
     // const [collapse, setCollapse] = useState([false]);
 
     const handleUploadClick = () => {
-        history.push('/admin');
+        history.push('/admin/upload');
     }
 
+    const isAdmin = () => {
+        return AuthService.validateAuthAdmin()
+    }
 
-
+    const handleDocumentClick = () => {
+        history.push('/admin');
+    }
     const handleFileClick = () => {
         history.push('/admin/files');
+    }
+    const handleTrainingClick = () => {
+        history.push('/admin/training');
     }
     const handleRequestClick = () => {
         history.push('/admin/request');
@@ -38,19 +47,27 @@ const SideNav = (props) => {
 
             </div>
             <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
-                <Menu.Item key="1" onClick={handleUploadClick}>
+                <Menu.Item key="1" onClick={handleDocumentClick}>
+                    <FilePdfOutlined />
+                    <span> Documents</span>
+                </Menu.Item>
+                <Menu.Item key="2" onClick={handleUploadClick}>
                     <UploadOutlined />
                     <span> Upload</span>
                 </Menu.Item>
 
                 <Menu.Item key="3" onClick={handleFileClick}>
                     <SolutionOutlined />
-                    <span> Results</span>
+                    <span> Classification</span>
                 </Menu.Item>
-                <Menu.Item key="4" onClick={handleRequestClick}>
+                <Menu.Item key="4" onClick={handleTrainingClick}>
+                    <SolutionOutlined />
+                    <span> Training Data</span>
+                </Menu.Item>
+                {isAdmin() ? <Menu.Item key="5" onClick={handleRequestClick}>
                     <SolutionOutlined />
                     <span> Request</span>
-                </Menu.Item>
+                </Menu.Item> : null}
             </Menu>
         </div>
     );

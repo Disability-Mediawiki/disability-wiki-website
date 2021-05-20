@@ -33,6 +33,7 @@ import Link from '@material-ui/core/Link';
 // import image from "/img/blog-work-dis.png";
 import DiswikiApi from '../../services/DiswikiApi';
 import AuthService from '../../services/AuthService';
+import { message } from 'antd';
 const useStyles = makeStyles(styles);
 
 const LoginPage = (props) => {
@@ -49,17 +50,58 @@ const LoginPage = (props) => {
   const classes = useStyles();
   const { ...rest } = props;
 
+  const loginAlert = (type, msg) => {
+    if (type == 'success') {
+      message.success({
+        content: 'Successfully loged in',
+        className: 'custom-class',
+        style: {
+          marginTop: '4vh',
+        },
+      });
+    }
+    if (type == 'logout') {
+      message.success({
+        content: 'Successfully logged out ',
+        className: 'custom-class',
+        style: {
+          marginTop: '4vh',
+        },
+      });
+    }
+    else if (type == 'required') {
+      message.warn({
+        content: 'Required username and password : ',
+        className: 'custom-class',
+        style: {
+          marginTop: '4vh',
+        },
+      });
+    }
+    else if (type == 'error') {
+      message.error({
+        content: 'Something went wrong ' + msg,
+        className: 'custom-class',
+        style: {
+          marginTop: '4vh',
+        },
+      });
+    }
+  }
   const handleLoginClick = (e) => {
-    history.push('/admin')
-    // if (userName && password) {
-    //   AuthService.login_dis_wiki(userName, password)
-    //     .then(res => {
-    //       window.sessionStorage.setItem("userConfig", JSON.stringify(res.data));
-    //       window.sessionStorage.setItem("userName", res.data.username);
-    //       history.push('/admin')
-    //     })
-    //     .catch(err => console.log(err))
-    // }
+    // history.push('/admin')
+    if (userName && password) {
+      AuthService.login_dis_wiki(userName, password)
+        .then(res => {
+          window.sessionStorage.setItem("userConfig", JSON.stringify(res.data));
+          window.sessionStorage.setItem("userName", res.data.username);
+          loginAlert("success")
+          history.push('/admin')
+        })
+        .catch(err => loginAlert("error", err))
+    } else {
+      loginAlert("required")
+    }
     // debugger
   }
   const handleForgotPasswordClick = (e) => {

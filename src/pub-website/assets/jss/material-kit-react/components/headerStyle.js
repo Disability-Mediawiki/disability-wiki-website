@@ -21,6 +21,7 @@ const headerStyle = {
     marginBottom: "20px",
     color: "#555",
     width: "100%",
+    height: "3rem",
     backgroundColor: "#fff",
     boxShadow:
       "0 4px 18px 0px rgba(0, 0, 0, 0.12), 0 7px 10px -5px rgba(0, 0, 0, 0.15)",
@@ -54,7 +55,7 @@ const headerStyle = {
   title: {
     ...defaultFont,
     lineHeight: "30px",
-    fontSize: "23px",
+    fontSize: "20px",
     borderRadius: "3px",
     textTransform: "none",
     color: "black",

@@ -316,7 +316,7 @@ const BodyContent = (props) => {
                         <Grid item xs={6}>
                             <div style={{ textAlign: 'left', paddingLeft: '5rem' }}>
                                 <Typography variant="h4" gutterBottom>
-                                    About us
+                                    About
                                 </Typography>
                                 <Typography variant="h6" gutterBottom>
                                     The data behind this project is Free, Open-source linked data that is mainted in MediaWiki Project,
@@ -328,9 +328,14 @@ const BodyContent = (props) => {
                             <div style={{ textAlign: 'left' }}>
                                 <Card className={searchCssClass.card.root}>
                                     <CardContent style={{ textAlign: 'left' }}>
+                                        <Typography variant="h4" gutterBottom>
+                                            Motivation
+                                        </Typography>
                                         <Typography variant="h6" gutterBottom>
-                                            The data behind this project is Free, Open-source linked data that is mainted in MediaWiki Project,
-                                            Promote the rights and information about disability rights and related articles based on different regions
+                                            Human rights monitoring for people with disabilities is in urgent need
+                                            Our aim is to use a Wikibase for editing, integrating and storing structured disability related data
+                                            Includes deliberation between content experts in critical disability and health informatics and computer science professionals
+
                                 </Typography>
 
                                     </CardContent>

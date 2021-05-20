@@ -11,13 +11,13 @@ import SearchHome from '../components/search/SearchHome'
 // import Home from '../components/Home'
 import ApplicationRoutes from './ApplicationRoutes'
 import { createBrowserHistory } from "history";
-import MainView from '../views/MainView'
-import SearchResult from '../views/SearchResult/SearchResult'
-import LoginPage from '../views/Login/LoginPage'
-import Header from "../views/Header/Header";
-import BodyContent from "../views/BodyContent/BodyContent";
+import MainView from '../pub-website/MainView'
+import SearchResult from '../pub-website/SearchResult/SearchResult'
+import LoginPage from '../pub-website/Login/LoginPage'
+import Header from "../pub-website/Header/Header";
+import BodyContent from "../pub-website/BodyContent/BodyContent";
 
-import HeaderLinks from "../views/Header/HeaderLinks";
+import HeaderLinks from "../pub-website/Header/HeaderLinks";
 
 var hist = createBrowserHistory();
 
