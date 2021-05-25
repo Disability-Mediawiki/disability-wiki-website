@@ -298,8 +298,22 @@ const DocumentResult = () => {
     //TAG FUNCTION
 
     const handleSaveEdit = (value) => {
-        console.log(trainingData)
-        console.log(tableDataEditLogs)
+        debugger
+        let payload = {
+            "edit": {
+                'classification_data': tableData,
+                'training_data': trainingData,
+                'table_edit_log': tableDataEditLogs
+            },
+            'document_name': 'CRPD.pdf'
+        }
+        DiswikiApi.updateCLassificationEdit(payload).
+            then(res => {
+                debugger
+                console.log(res)
+            }).catch(err => console.log(err))
+        // console.log(trainingData)
+        // console.log(tableDataEditLogs)
 
     }
     const handleGlossaryChange = (value, option) => {

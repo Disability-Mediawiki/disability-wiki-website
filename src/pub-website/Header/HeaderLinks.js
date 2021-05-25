@@ -137,7 +137,7 @@ export default function HeaderLinks(props) {
           className={classes.navLink}
         >
           <Link to="/wiki_search" color="transparent">
-            <SearchIcon color="transparent" className={classes.icons} />
+            <SearchIcon className={classes.icons} />
             QAnswer
         </Link>
         </Button>

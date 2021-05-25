@@ -177,11 +177,11 @@ class QASearch extends React.Component {
                     width: '100vw',
                     // height: '100vh'
                     marginTop: '3rem',
-                    height: '40vh'
+                    height: '35vh'
                 }}
             >
                 <div style={{
-                    height: '40vh',
+                    height: '35vh',
                     // height: '30%',
                     backgroundPosition: 'center',
                     backgroundRepeat: 'no-repeat',
@@ -267,7 +267,7 @@ class QASearch extends React.Component {
                         </Row>
                     </TweenOne>
                 </div>
-            </div>
+            </div >
         );
     }
 }

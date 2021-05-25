@@ -34,13 +34,57 @@ import Link from '@material-ui/core/Link';
 import DiswikiApi from '../../services/DiswikiApi';
 import AuthService from '../../services/AuthService';
 import { message } from 'antd';
+import Paper from '@material-ui/core/Paper';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import PropTypes from 'prop-types';
+import Box from '@material-ui/core/Box';
+
+import RegisterPage from './RegisterPage';
+
+
+
 const useStyles = makeStyles(styles);
+
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`scrollable-auto-tabpanel-${index}`}
+      aria-labelledby={`scrollable-auto-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box p={3}>
+          {children}
+        </Box>
+      )}
+    </div>
+  );
+}
+
+TabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.any.isRequired,
+  value: PropTypes.any.isRequired,
+};
+
+function a11yProps(index) {
+  return {
+    id: `scrollable-auto-tab-${index}`,
+    'aria-controls': `scrollable-auto-tabpanel-${index}`,
+  };
+}
 
 const LoginPage = (props) => {
   const [cardAnimaton, setCardAnimation] = React.useState("cardHidden");
 
   const [userName, setUserName] = useState('')
   const [password, setPassword] = useState('')
+  const [tabValue, setTabValue] = useState(0)
   const [showPassword, setShowPassword] = useState(false)
 
   let history = useHistory();
@@ -121,7 +165,9 @@ const LoginPage = (props) => {
     debugger
     setShowPassword(!showPassword);
   }
-
+  const handleTabChange = (event, newValue) => {
+    setTabValue(newValue);
+  };
 
   return (
     <div>
@@ -137,105 +183,91 @@ const LoginPage = (props) => {
         <div className={classes.container}>
           <GridContainer justify="center">
             <GridItem xs={12} sm={12} md={4}>
-              <Card className={classes[cardAnimaton]}>
-                <form className={classes.form}>
-                  <CardHeader color="primary" className={classes.cardHeader}>
-                    <h2>Login</h2>
-                    <div className={classes.socialLine}>
-                      {/* <Button
-                        justIcon
-                        href="#pablo"
-                        target="_blank"
-                        color="transparent"
-                        onClick={e => e.preventDefault()}
-                      >
-                        <i className={"fab fa-twitter"} />
-                      </Button>
-                      <Button
-                        justIcon
-                        href="#pablo"
-                        target="_blank"
-                        color="transparent"
-                        onClick={e => e.preventDefault()}
-                      >
-                        <i className={"fab fa-facebook"} />
-                      </Button>
-                      <Button
-                        justIcon
-                        href="#pablo"
-                        target="_blank"
-                        color="transparent"
-                        onClick={e => e.preventDefault()}
-                      >
-                        <i className={"fab fa-google-plus-g"} />
-                      </Button> */}
-                    </div>
-                  </CardHeader>
-                  <p className={classes.divider}>Disability Wiki Login</p>
-                  <CardBody>
+              <Paper square>
+                <Tabs
+                  value={tabValue}
+                  indicatorColor="primary"
+                  textColor="primary"
+                  onChange={handleTabChange}
+                  aria-label="disabled tabs example"
+                >
+                  <Tab label="Login" />
+                  <Tab label="Create" />
+                </Tabs>
+              </Paper>
+              <TabPanel value={tabValue} index={0}>
+                <Card className={classes[cardAnimaton]}>
+                  <form className={classes.form}>
+                    <CardHeader color="primary" className={classes.cardHeader}>
+                      <h2>Login</h2>
 
-                    <Input
-                      fullWidth='true'
-                      labelText="asdasdsad"
-                      inputProps={{
-                        'aria-label': 'Username',
-                      }}
-                      type='email'
-                      style={{ marginTop: '1rem' }}
-                      placeholder="Email"
-                      value={userName}
-                      onChange={handleEmailChange}
-                      endAdornment={
-                        <InputAdornment position="end">
-                          <IconButton
-                          >
-                            <Email />
-                          </IconButton>
-                        </InputAdornment>
-                      }
-                    />
-                    <Input
-                      placeholder="Password"
-                      id="standard-adornment-password"
-                      fullWidth='true'
-                      style={{ marginTop: '2rem', marginBottom: '1rem' }}
+                    </CardHeader>
+                    <p className={classes.divider}>Disability Wiki Login</p>
+                    <CardBody>
 
-                      inputProps={{
-                        'aria-label': 'Password',
-                      }}
-                      type={showPassword ? 'text' : 'password'}
-                      value={password}
-                      onChange={handlePasswordChange}
-                      endAdornment={
-                        <InputAdornment position="end">
-                          <IconButton
-                            aria-label="toggle password visibility"
-                            onClick={handleClickShowPassword}
-                            onMouseDown={handleClickShowPassword}
-                          >
-                            {showPassword ? <Visibility /> : <VisibilityOff />}
-                          </IconButton>
-                        </InputAdornment>
-                      }
-                    />
+                      <Input
+                        inputProps={{
+                          'aria-label': 'Username',
+                        }}
+                        type='email'
+                        style={{ marginTop: '1rem' }}
+                        placeholder="Email"
+                        value={userName}
+                        onChange={handleEmailChange}
+                        endAdornment={
+                          <InputAdornment position="end">
+                            <IconButton
+                            >
+                              <Email />
+                            </IconButton>
+                          </InputAdornment>
+                        }
+                      />
+                      <Input
+                        placeholder="Password"
+                        id="standard-adornment-password"
+                        style={{ marginTop: '2rem', marginBottom: '1rem' }}
 
-                  </CardBody>
-                  <CardFooter className={classes.cardFooter}>
-                    <Button simple color="primary" size="lg" onClick={handleLoginClick}>
-                      Login
+                        inputProps={{
+                          'aria-label': 'Password',
+                        }}
+                        type={showPassword ? 'text' : 'password'}
+                        value={password}
+                        onChange={handlePasswordChange}
+                        endAdornment={
+                          <InputAdornment position="end">
+                            <IconButton
+                              aria-label="toggle password visibility"
+                              onClick={handleClickShowPassword}
+                              onMouseDown={handleClickShowPassword}
+                            >
+                              {showPassword ? <Visibility /> : <VisibilityOff />}
+                            </IconButton>
+                          </InputAdornment>
+                        }
+                      />
+
+                    </CardBody>
+                    <CardFooter className={classes.cardFooter}>
+                      <Button simple color="primary" size="lg" onClick={handleLoginClick}>
+                        Login
                     </Button>
-                    <Button simple color="primary" size="lg" onClick={handleForgotPasswordClick}>
-                      Forgot password
+                      <Button simple color="primary" size="lg" onClick={handleForgotPasswordClick}>
+                        Forgot password
                     </Button>
-                  </CardFooter>
-                </form>
-                <Button simple style={{ color: "#757ce8" }} size="sm">
-                  Create a new account
-                </Button>
+                    </CardFooter>
+                  </form>
 
-              </Card>
+
+                </Card>
+              </TabPanel>
+              <TabPanel value={tabValue} index={1}>
+                <RegisterPage />
+              </TabPanel>
+
             </GridItem>
           </GridContainer>
+
         </div>
         {/* <Footer whiteFont /> */}
       </div>

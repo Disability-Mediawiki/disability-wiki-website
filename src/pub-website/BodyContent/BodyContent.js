@@ -169,151 +169,12 @@ const BodyContent = (props) => {
                     />
                 </Paper>
 
-                <div style={{ paddingTop: '3rem' }}>
-                    <Grid container spacing={3}>
-                        <Grid item xs={6}>
-                            <div style={{ textAlign: 'left', paddingLeft: '5rem' }}>
-                                <Typography variant="h4" gutterBottom>
-                                    Explore
-                                </Typography>
-                                <Typography variant="h6" gutterBottom>
-                                    Browse Documents, Conventions, Events, Places, and More
-                                </Typography>
-                            </div>
-                        </Grid>
-                        <Grid item xs={5}>
-                            <div style={{ textAlign: 'left' }}>
-                                <Card className={searchCssClass.card.root}>
-                                    <CardContent style={{ textAlign: 'left' }}>
-                                        <List component="nav" aria-label="main mailbox folders">
-                                            <ListItem button>
-                                                <ListItemIcon>
-                                                    <InsertDriveFileIcon />
-                                                </ListItemIcon>
-                                                <ListItemText primary="DOCUMENTS" />
-                                            </ListItem>
-                                            <Divider />
-                                            <ListItem button>
-                                                <ListItemIcon>
-                                                    <PublicIcon />
-                                                </ListItemIcon>
-                                                <ListItemText primary="COUNTRIES" />
-                                            </ListItem>
-                                            <Divider />
-                                            <ListItem button>
-                                                <ListItemIcon>
-                                                    <PlaceIcon />
-                                                </ListItemIcon>
-                                                <ListItemText primary="PEOPLE" />
-                                            </ListItem>
-                                            <Divider />
-                                            <ListItem button>
-                                                <ListItemIcon>
-                                                    <GavelIcon />
-                                                </ListItemIcon>
-                                                <ListItemText primary="RIGHTS" />
-                                            </ListItem>
-                                        </List>
 
-                                    </CardContent>
-                                </Card>
-                            </div>
-                        </Grid>
-                    </Grid>
-                </div>
-                {/* <Divider style={{ paddingTop: '1rem' }} /> */}
-                <div style={{ paddingTop: '3rem' }}>
-                    <div className={classes.exploreRoot}>
-                        <Grid container spacing={3}>
-                            <Grid item xs={12}>
-                                <div style={{ textAlign: 'left', paddingLeft: '5rem' }}>
-                                    <Typography variant="h4" gutterBottom>
-                                        Topics
-                                </Typography>
-                                </div>
-                            </Grid>
-                            <Grid item xs={6} sm={1}></Grid>
-                            <Grid item xs={6} sm={3}>
-                                <Paper className={classes.explorePaper}>
-                                    <Card className={searchCssClass.card.root}>
-                                        <CardContent style={{ textAlign: 'left' }}>
-                                            <Typography variant="h6" component="h2">
-                                                CRPD Article 1
-                                            </Typography>
-                                            <Typography className={searchCssClass.card.title} color="textSecondary" gutterBottom>
-                                                Subtopic
-                                             </Typography>
-
-                                            <Typography className={searchCssClass.card.pos} color="textSecondary">
-                                                Health
-                                            </Typography>
-                                            <Typography variant="body2" component="p">
-                                                well beign of human
-                                            </Typography>
-                                        </CardContent>
-                                        <CardActions>
-                                            <Button size="small">Learn More</Button>
-                                        </CardActions>
-                                    </Card>
-                                </Paper>
-                            </Grid>
-                            <Grid item xs={6} sm={3}>
-                                <Paper className={classes.explorePaper}>
-                                    <Card className={searchCssClass.card.root}>
-                                        <CardContent style={{ textAlign: 'left' }}>
-                                            <Typography variant="h6" component="h2">
-                                                Diability
-                                            </Typography>
-                                            <Typography className={searchCssClass.card.title} color="textSecondary" gutterBottom>
-                                                Rights
-                                             </Typography>
-
-                                            <Typography className={searchCssClass.card.pos} color="textSecondary">
-                                                Information on Disabi....
-                                            </Typography>
-                                            <Typography variant="body2" component="p">
-                                                Rights of a disabled person
-                                            </Typography>
-                                        </CardContent>
-                                        <CardActions>
-                                            <Button size="small">Learn More</Button>
-                                        </CardActions>
-                                    </Card>
-                                </Paper>
-                            </Grid>
-                            <Grid item xs={6} sm={3}>
-                                <Paper className={classes.explorePaper}>
-                                    <Card className={searchCssClass.card.root}>
-                                        <CardContent style={{ textAlign: 'left' }}>
-                                            <Typography variant="h6" component="h2">
-                                                Prevention of rights
-                                            </Typography>
-                                            <Typography className={searchCssClass.card.title} color="textSecondary" gutterBottom>
-                                                Rights from WHO
-                                             </Typography>
-
-                                            <Typography className={searchCssClass.card.pos} color="textSecondary">
-                                                Sub rights
-                                            </Typography>
-                                            <Typography variant="body2" component="p">
-                                                Explore
-                                            </Typography>
-                                        </CardContent>
-                                        <CardActions>
-                                            <Button size="small">Learn More</Button>
-                                        </CardActions>
-                                    </Card>
-                                </Paper>
-                            </Grid>
-
-                        </Grid>
-                    </div>
-                </div>
 
                 <Divider style={{ marginTop: "1rem" }} />
                 <div style={{ paddingTop: '3rem' }}>
                     <Grid container spacing={3}>
-                        <Grid item xs={6}>
+                        <Grid item xs={3}>
                             <div style={{ textAlign: 'left', paddingLeft: '5rem' }}>
                                 <Typography variant="h4" gutterBottom>
                                     About
@@ -324,12 +185,48 @@ const BodyContent = (props) => {
                                 </Typography>
                             </div>
                         </Grid>
-                        <Grid item xs={5}>
+                        <Grid item xs={3}>
                             <div style={{ textAlign: 'left' }}>
                                 <Card className={searchCssClass.card.root}>
                                     <CardContent style={{ textAlign: 'left' }}>
                                         <Typography variant="h4" gutterBottom>
                                             Motivation
+                                        </Typography>
+                                        <Typography variant="h6" gutterBottom>
+                                            Human rights monitoring for people with disabilities is in urgent need
+                                            Our aim is to use a Wikibase for editing, integrating and storing structured disability related data
+                                            Includes deliberation between content experts in critical disability and health informatics and computer science professionals
+
+                                </Typography>
+
+                                    </CardContent>
+                                </Card>
+                            </div>
+                        </Grid>
+                        <Grid item xs={3}>
+                            <div style={{ textAlign: 'left' }}>
+                                <Card className={searchCssClass.card.root}>
+                                    <CardContent style={{ textAlign: 'left' }}>
+                                        <Typography variant="h4" gutterBottom>
+                                            Project
+                                        </Typography>
+                                        <Typography variant="h6" gutterBottom>
+                                            Human rights monitoring for people with disabilities is in urgent need
+                                            Our aim is to use a Wikibase for editing, integrating and storing structured disability related data
+                                            Includes deliberation between content experts in critical disability and health informatics and computer science professionals
+
+                                </Typography>
+
+                                    </CardContent>
+                                </Card>
+                            </div>
+                        </Grid>
+                        <Grid item xs={3}>
+                            <div style={{ textAlign: 'left' }}>
+                                <Card className={searchCssClass.card.root}>
+                                    <CardContent style={{ textAlign: 'left' }}>
+                                        <Typography variant="h4" gutterBottom>
+                                            Goal
                                         </Typography>
                                         <Typography variant="h6" gutterBottom>
                                             Human rights monitoring for people with disabilities is in urgent need

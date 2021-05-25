@@ -21,20 +21,19 @@ import PrivateRoute from "./config/PrivateRoute";
 
 // import MyApp from "./pub-website/DocumentViewer/DocumentViewer";
 // import SinglePage from "./pub-website/DocumentViewer/New";
-import PDFViewer from "./pub-website/DocumentViewer/index";
+
 // import { Worker } from '@react-pdf-viewer/core';
 // import { Viewer } from '@react-pdf-viewer/core';
 
 
-import Test from "./pub-website/DocumentViewer/Test";
+import PdfViewer from "./pub-website/DocumentViewer/PdfViewer";
 
-import { pdfjs } from 'react-pdf';
+
 // Import the styles
 // import '@react-pdf-viewer/core/lib/styles/index.css';
 
 // Your render function
 var hist = createBrowserHistory();
-pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 function App() {
   return (
@@ -54,7 +53,7 @@ function App() {
         <Route path={`/`}><MainView history={hist} /></Route>
       </Switch>
       {/* <Route exact path="/admin">< ApplicationRoutes history={hist} /></Route> */}
-      {/* <Test /> */}
+      {/* <PdfViewer /> */}
 
     </div>
   );

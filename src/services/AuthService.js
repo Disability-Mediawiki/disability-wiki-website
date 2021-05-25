@@ -7,9 +7,14 @@ class AuthService {
         let body = { 'usernameOrEmail': username, 'password': password }
         return axios.post(`${API_HOST_QA}user/signin`, body);
     }
+
     login_dis_wiki(email, password) {
         let body = { 'email': email, 'password': password }
         return axios.post(`${API_HOST_DIS_WIKI}user/login`, body);
+    }
+    register(username, email, password) {
+        let body = { 'username': username, 'email': email, 'password': password }
+        return axios.post(`${API_HOST_DIS_WIKI}user/register`, body);
     }
     authCheck() {
         let userConfig = JSON.parse(window.sessionStorage.getItem('userConfig'))

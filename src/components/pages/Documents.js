@@ -1,17 +1,36 @@
-import { CloudDownloadOutlined, EyeOutlined } from '@ant-design/icons';
-import { Button, Col, Row, Table, Tooltip, Typography } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
+import {
+    Link as Routinglink
+} from "react-router-dom";
+import { CloudDownloadOutlined, EyeOutlined } from '@ant-design/icons';
+import { Button, Col, Row, Table, Tooltip, Typography, Modal } from 'antd';
 import DiswikiApi from '../../services/DiswikiApi'
 import Link from '@material-ui/core/Link';
+import PdfViewer from '../layouts/PdfViewer';
+import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
+import { makeStyles } from '@material-ui/core/styles';
 const { Title } = Typography;
 
+const useStyles = makeStyles((theme) => ({
+    root: {
+        flexGrow: 1,
+    },
+    paper: {
+        padding: theme.spacing(2),
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
+    },
+}));
+
 const Documents = () => {
+    const classes = useStyles();
     const history = useHistory();
     const [allData, setAllData] = useState([]);
     const [tableData, setTableData] = useState([]);
     const [fileList, setFileList] = useState([]);
-
+    const [modalVisible, setModalVisible] = useState(false);
     useEffect(() => {
         getFiles();
 
@@ -70,7 +89,7 @@ const Documents = () => {
             })
     }
     const onView = (record) => {
-        console.log(record)
+        setModalVisible(true)
     }
     const getActionButton = (record) => {
         return (
@@ -83,9 +102,10 @@ const Documents = () => {
                     {/* <Button shape="circle" style={{ color: "red" }} icon={<CloudDownloadOutlined key={record.id + "download"} />} >
                         <a href={`http://localhost:5000/api/file/download-document?file_name=${record.name}`}></a>
                     </Button> */}
-                    <Link style={{ marginLeft: '1rem', marginTop: '0.4rem' }} href={`http://localhost:5000/api/file/download-document?file_name=${record.name}`} onClick={e => { }}>
+                    <Link style={{ marginLeft: '1rem', marginTop: '0.4rem' }} href={`http://localhost:5000/api/file/download-document?file_name=${record.name}`} onClick={e => { }} target="_blank"  >
                         <CloudDownloadOutlined key={record.id + "download"} />
                     </Link>
+                    {/* <Routinglink style={{ marginLeft: '1rem', marginTop: '0.4rem' }} to={`http://localhost:5000/api/file/download-document?file_name=${record.name}`} target="_blank"><CloudDownloadOutlined key={record.id + "download"} /></Routinglink> */}
                 </Tooltip>
             </Row>
 
@@ -112,6 +132,28 @@ const Documents = () => {
                     </Title>}
                 </Col>
             </Row>
+            <div>
+                <Modal
+                    title="Document"
+                    centered
+                    visible={modalVisible}
+                    onOk={() => setModalVisible(false)}
+                    onCancel={() => setModalVisible(false)}
+                    width={800}
+                    height={600}
+                >
+                    <div>
+                        <Grid container spacing={3}>
+                            <Grid item xs={12}>
+                                <Paper className={classes.paper}>
+                                    <PdfViewer />
+                                </Paper>
+                            </Grid>
+                        </Grid>
+
+                    </div>
+                </Modal>
+            </div>
         </div>
     );
 }

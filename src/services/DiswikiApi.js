@@ -29,8 +29,14 @@ class DiswikiApi {
 
     }
     getClassificationResult(fileName) {
-        return axios.get(`http://localhost:5000/api/file/download`,
-            { params: { 'file_name': fileName } })
+        const headers = {
+            'Authorization': `Bearer ${JSON.parse(window.sessionStorage.getItem('userConfig')).auth_token}`
+        }
+
+        return axios.get(`${API_HOST}doc-classifiy/download`,
+            {
+                params: { 'file_name': fileName }, headers
+            })
     }
     getDocumentList() {
         const config = {
@@ -63,6 +69,14 @@ class DiswikiApi {
             }
         }
         return axios.get(`${API_HOST}glossary/get-all-flat`, { config })
+    }
+    updateCLassificationEdit(payload) {
+        const config = {
+            headers: {
+                'Authorization': `Bearer ${JSON.parse(window.sessionStorage.getItem('userConfig')).auth_token}`
+            }
+        }
+        return axios.post(`${API_HOST}doc-classifiy/update`, payload, config)
     }
 }
 
