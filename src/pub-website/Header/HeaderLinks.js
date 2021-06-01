@@ -26,20 +26,22 @@ import HomeIcon from '@material-ui/icons/Home';
 // core components
 import CustomDropdown from "../components/CustomDropdown/CustomDropdown.js";
 import Button from "../components/CustomButtons/Button.js";
-
+import { Select } from 'antd';
 import styles from "../assets/jss/material-kit-react/components/headerLinksStyle.js";
 
 const useStyles = makeStyles(styles);
-
+const { Option } = Select;
 export default function HeaderLinks(props) {
   const { path, url } = useRouteMatch();
   const classes = useStyles();
   let history = useHistory();
   const handleHomeClick = (e) => {
-    debugger
-
     history.push(`/`)
   }
+  const onLangChange = (e) => {
+
+  }
+
   return (
     <List className={classes.list}>
       <ListItem className={classes.listItem}>
@@ -138,7 +140,7 @@ export default function HeaderLinks(props) {
         >
           <Link to="/wiki_search" color="transparent">
             <SearchIcon className={classes.icons} />
-            QAnswer
+            Search
         </Link>
         </Button>
       </ListItem>
@@ -152,6 +154,12 @@ export default function HeaderLinks(props) {
             Login
             </Link>
         </Button>
+      </ListItem>
+      <ListItem className={classes.listItem}>
+        <Select defaultValue="en" style={{ width: 60, marginTop: '0.5rem', marginLeft: '0.5rem' }} onChange={onLangChange}>
+          <Option value="en">EN</Option>
+          <Option value="fr">FR</Option>
+        </Select>
       </ListItem>
     </List>
   );

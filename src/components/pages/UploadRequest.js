@@ -1,81 +1,121 @@
-import React, { useEffect, useState } from 'react';
-import { Table, Row, Col, Button, Tooltip, Typography } from 'antd';
-import { useHistory } from 'react-router';
+import { CheckCircleOutlined, CloseCircleOutlined, DownOutlined, EyeOutlined } from '@ant-design/icons';
+import { Button, Col, Dropdown, Menu, Row, Table, Tooltip, Typography, Modal } from 'antd';
 import axios from 'axios';
-import { Menu, Dropdown, Popconfirm } from 'antd';
-import { DownOutlined } from '@ant-design/icons';
-import { SearchOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
-import EditableTable from '../layouts/TableLayout'
-
+import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router';
+import { Popconfirm } from 'antd';
+import DiswikiApi from '../../services/DiswikiApi';
+import Avatar from '@material-ui/core/Avatar';
+import Chip from '@material-ui/core/Chip';
+import Grid from '@material-ui/core/Grid';
+import { message, Spin } from 'antd';
 const { Title } = Typography;
 
 const UploadRequest = () => {
     const history = useHistory();
-    const [allData, setAllData] = useState([]);
     const [tableData, setTableData] = useState([]);
+    const [classificationData, setClassificationData] = useState([]);
     const [fileList, setFileList] = useState([]);
+    const [modalVisible, setModalVisible] = useState(false);
+    const [isUploading, setIsUploading] = useState(false);
 
     useEffect(() => {
         getFiles();
-        setTableData([
-            {
-                'username': 'testUser',
-                'filename': 'convention.pdf',
-                'datetime': '04/22/2021+GMT3:00',
-                'status': 'pending',
-            },
-            {
-                'username': 'testUser',
-                'filename': 'convention.pdf',
-                'datetime': '04/22/2021+GMT3:00',
-                'status': 'pending',
-            },
 
-        ])
     }, []);
     const getFiles = () => {
-        axios.get(`http://localhost:8080/api/file/list`)
-            .then(response => {
+        DiswikiApi.getAllPendingWikiEditRequest()
+            .then(res => {
                 debugger
-                console.log(response.data)
-                setFileList(response.data)
+                if (res.status === 200) {
+                    if (res.data.length > 0)
+                        setTableData(res.data)
+                }
+            }).catch(err => {
+                message.error({
+                    content: 'Internal error : ' + err,
+                    className: 'custom-class',
+                    style: {
+                        marginTop: '4vh',
+                    },
+                })
             })
-            .catch(err => console.warn(err));
     }
+
+    const classificationTableColumns = [
+        {
+            title: 'ID',
+            dataIndex: 'id',
+            width: '5%',
+            key: 'DocumentResultTableID'
+        },
+        {
+            title: 'Paragraph',
+            dataIndex: 'paragraph',
+            width: '60%',
+            key: 'DocumentResultTable_Paragraph'
+        },
+        {
+            title: 'Tags',
+            dataIndex: 'tags',
+            editable: false,
+            key: 'DocumentResultTable_Tag',
+            render: (_, record) =>
+                classificationData.length >= 0 && record.tags ? record.tags.map((tag, i) => {
+                    return i < record.tags.length - 1 ?
+                        (
+                            <Chip
+                                avatar={<Avatar>T</Avatar>}
+                                label={tag.text}
+                                key={i + "delelte_tag"}
+                                clickable
+                                color={(tag.new) ? "secondary" : 'primary'}
+                                // deleteIcon={<DoneIcon />}
+                                style={{ marginRight: '0.5rem', marginBottom: '0.5rem' }}
+                            />) : (
+                            <span>
+                                <Chip
+                                    avatar={<Avatar>T</Avatar>}
+                                    label={tag.text}
+                                    key={i + "delelte_two_tag"}
+                                    clickable
+                                    color={(tag.new) ? "secondary" : 'primary'}
+                                    style={{ marginRight: '0.5rem', marginBottom: '0.5rem' }}
+                                />
+                            </span>
+                        )
+
+                }) : null,
+        },
+
+    ];
+
+
     const columns = [
         {
-            title: 'UserName',
-            dataIndex: 'username',
-            editable: true,
+            title: 'User name',
+            key: 'user_name_key',
+            dataIndex: 'user_name',
         },
         {
-            title: 'File Name',
-            dataIndex: 'filename'
+            title: 'Document Name',
+            key: 'document_name_key',
+            dataIndex: 'document_name'
         },
         {
-            title: 'Uploaded time',
-            dataIndex: 'datetime'
+            title: 'Requested time',
+            key: 'requested_time_key',
+            dataIndex: 'date'
         },
         {
             title: 'Status',
+            key: 'request_status',
             dataIndex: 'status'
         },
         {
             title: 'Action',
+            key: 'action_button',
             dataIndex: 'action',
-            // render: (_, record) =>
-            //     tableData.length >= 1 ? (
-            //         <div>
-
-            //             <Popconfirm style={{ marginLeft: '1rem' }} title="Sure to delete?" onConfirm={() => console.log(record)}>
-            //                 <a>Aprove</a>
-            //             </Popconfirm>
-            //             <Popconfirm title="Sure to delete?" onConfirm={() => console.log(record)}>
-            //                 <a>Delete</a>
-            //             </Popconfirm>
-
-            //         </div>
-            //     ) : null,
             render: (_, record) =>
                 tableData.length >= 1 ?
                     getActionButton(record)
@@ -83,99 +123,152 @@ const UploadRequest = () => {
         }
     ];
 
+    const onView = (record) => {
+        setModalVisible(true);
+        if (record) {
+            DiswikiApi.getClassificationViewResult('CRPD.pdf')
+                .then(res => {
+                    let tbData = []
+                    if (res.status === 200 && res.data.length > 0) {
+                        res.data.forEach((data, index) => {
+                            tbData.push({
+                                "classification_id": data.classification_id,
+                                "tags": data.tag,
+                                "paragraph": data.paragraph,
+                                "key": index + "_classification_data",
+                                "id": data.id
+                            })
+                        })
+                        setClassificationData(tbData)
+                    }
 
+                }).catch(err => {
+                    console.log(err)
+                })
+        }
+    }
 
-    const data = [{
-    }];
+    const onApprove = (record) => {
 
-    allData.map((user) => {
-        data.push({
-            key: user.id,
-            username: user.username,
-            email: user.email,
-            gender: user.gender,
-            review: user.review + '%',
-        })
-        return data;
-    });
-    const getActionButton = (key) => {
+        if (record && record.id && record.document_id) {
+            setIsUploading(true)
+            let payload = {
+                'request_id': record.id,
+                'document_id': record.document_id,
+                'status': 'accepted',
+            }
+            DiswikiApi.updateUploadRequest(payload)
+                .then((res) => {
+                    message.success({
+                        content: 'Action updated successfully',
+                        className: 'custom-class',
+                        style: {
+                            marginTop: '4vh',
+                        },
+                    });
+                    getFiles();
+                    setIsUploading(false)
+                })
+                .catch((err) => {
+                    message.error({
+                        content: 'Internal error : ' + err,
+                        className: 'custom-class',
+                        style: {
+                            marginTop: '4vh',
+                        },
+                    })
+                    setIsUploading(false)
+                })
+        }
+    }
+
+    const onReject = (record) => {
+        debugger
+        if (record && record.id && record.document_id) {
+            let payload = {
+                'request_id': record.id,
+                'document_id': record.document_id,
+                'status': 'rejected',
+            }
+            DiswikiApi.updateUploadRequest(payload)
+                .then((res) => {
+                    debugger
+                    console.log(res)
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
+        }
+    }
+
+    const getActionButton = (record) => {
         return (
-            <Row>
+            <Row key={record.id + "action_button_row_key"}>
+                <Tooltip title="View" >
+                    <Button shape="circle" onClick={e => onView(record)} style={{ color: "green", }} icon={<EyeOutlined />} />
+                </Tooltip>
                 <Tooltip title="Approve" >
-                    <Button shape="circle" style={{ color: "green" }} icon={<CheckCircleOutlined />} />
+                    <Button shape="circle" onClick={e => onApprove(record)} style={{ color: "green", marginLeft: '0.5rem' }} icon={<CheckCircleOutlined />} />
                 </Tooltip>
-                <Tooltip title="Delete" style={{ marginLeft: "3rem" }}>
-                    <Button shape="circle" style={{ color: "red" }} icon={<CloseCircleOutlined />} />
-                </Tooltip>
+                {/* <Tooltip title="Delete" style={{ marginLeft: "3rem" }} color={'red'} visible={true} onVisibleChange={e => console.log('')} > */}
+                <Popconfirm title="Sure to delete?" onConfirm={() => console.log(record)} >
+                    <Button shape="circle" style={{ color: "red", marginLeft: '0.5rem' }} icon={<CloseCircleOutlined />} />
+                </Popconfirm>
+                {/* </Tooltip> */}
+
             </Row>
 
         )
     }
 
-    const getFileResult = (fileName) => {
-        if (!fileName) return;
-        axios.get(`http://localhost:8080/api/file/download`,
-            { params: { 'fileName': fileName } })
-            .then(res => {
-                let tbData = []
-                if (res.status === 200) {
-                    for (let key in res.data.result) {
-                        tbData.push({
-                            "label": res.data.result[key].join(),
-                            "paragraph": key,
-                            "action": getActionButton(key)
-                        })
-                    }
-                    setTableData(tbData);
-                }
-            })
-            .catch(err => console.warn(err));
-    }
-    const handleClick = () => {
-        history.push('/form')
-    }
-    function handleFileClick(e) {
 
-        getFileResult(fileList[e.key])
-    }
 
-    const getFileList = () => {
-        return (< Menu onClick={handleFileClick} >{
-            fileList.map((item, index) => {
-                return (
-                    <Menu.Item key={index}>
-                        {item}
-                    </Menu.Item>
-                )
-            })
-        }</Menu >)
-
-    }
     return (
 
-        <div>
-
+        (isUploading) ? <Spin size="large" tip="Updating your action...Please wait" /> : <div>
             <Row gutter={[40, 0]}>
                 <Col span={20}>
                     <Title level={2}>
                         Upload Request
                     </Title>
                 </Col>
-                <Col span={2}>
-                    {/* <Button onClick={handleClick} block>Add User</Button> */}
-                    <Dropdown.Button overlay={getFileList} trigger={['click']} >
-                        <a className="ant-dropdown-link" onClick={e => handleFileClick(e)}>
-                            Select file <DownOutlined />
-                        </a>
-                    </Dropdown.Button>
-                </Col>
+
             </Row>
             <Row gutter={[40, 0]}>
                 <Col span={24}>
                     <Table columns={columns} dataSource={tableData} />
                 </Col>
             </Row>
+            <div>
+                <Modal
+                    title="Upload Request"
+                    centered
+                    visible={modalVisible}
+                    style={{ top: -20 }}
+                    onOk={() => setModalVisible(false)}
+                    onCancel={() => setModalVisible(false)}
+                    width={1200}
+                    height={600}
+                >
+                    <div>
+                        <Grid container spacing={24}>
+                            <Grid item xs={12}>
+                                <Table
+                                    pagination={{ pageSize: 2 }}
+                                    rowClassName={() => 'editable-row'}
+                                    bordered
+                                    dataSource={classificationData}
+                                    columns={classificationTableColumns}
+                                />
+                            </Grid>
+                        </Grid>
+
+                    </div>
+                </Modal>
+            </div>
         </div>
+
+
     );
 }
 

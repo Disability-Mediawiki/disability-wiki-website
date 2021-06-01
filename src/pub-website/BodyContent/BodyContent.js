@@ -2,8 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import classNames from "classnames";
-import Header from "../Header/Header";
-import HeaderLinks from "../Header/HeaderLinks";
+
 import Parallax from "../Parallax/Parallax.js";
 import GridContainer from "../Grid/GridContainer.js";
 import GridItem from "../Grid/GridItem.js";
@@ -38,8 +37,11 @@ import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import PublicIcon from '@material-ui/icons/Public';
 import GavelIcon from '@material-ui/icons/Gavel';
 import PlaceIcon from '@material-ui/icons/Place';
+import GroupIcon from '@material-ui/icons/Group';
+import AccessibleForwardIcon from '@material-ui/icons/AccessibleForward';
 
-
+import { FundProjectionScreenOutlined } from '@ant-design/icons';
+import TrackChangesIcon from '@material-ui/icons/TrackChanges';
 import '@fontsource/roboto';
 function ListItemLink(props) {
     return <ListItem button component="a" {...props} />;
@@ -54,6 +56,13 @@ const searchStyle = makeStyles((theme) => ({
         width: '80%',
 
     },
+    aboutCardRoot: {
+        maxWidth: 345,
+    },
+    aboutCardMedia: {
+        height: 140,
+    },
+
     input: {
         marginLeft: theme.spacing(1),
         flex: 1,
@@ -109,7 +118,7 @@ const BodyContent = (props) => {
     }, []);
 
     const handleSearchClick = (event) => {
-        debugger
+
         if (textValues.search) {
             history.push({
                 pathname: '/wiki_search',
@@ -124,17 +133,20 @@ const BodyContent = (props) => {
 
         <div>
             {/* <Parallax image={require("./assets/img/bg4.jpg")}> */}
-            <Parallax image='/img/blog-work-dis.png'>
+            {/* <Parallax image='/img/blog-work-dis.png'> */}
+            <Parallax image='/img/3715.jpg'>
+
                 <div className={classes.container}>
                     <GridContainer>
                         <GridItem>
                             <div className={classes.brand}>
-                                <h1 className={classes.title} style={{ color: 'white', textShadow: '1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000' }}>Disability Wiki Project</h1>
-                                <h3 className={classes.subtitle} style={{
-                                    color: 'white', textShadow: '1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000'
+                                <h1 className={classes.title} style={{ marginTop: '30rem', color: 'rgb(250 180 6)', textShadow: '1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000' }}>Disability Wiki Project</h1>
+
+                                {/* <h3 className={classes.subtitle} style={{
+                                    color: '#006a82', textShadow: '1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000'
                                 }}>
-                                    Linked Open data project.
-            </h3>
+                                    Linked Open Data Project.
+                                </h3> */}
                             </div>
                         </GridItem>
                     </GridContainer>
@@ -175,67 +187,83 @@ const BodyContent = (props) => {
                 <div style={{ paddingTop: '3rem' }}>
                     <Grid container spacing={3}>
                         <Grid item xs={3}>
-                            <div style={{ textAlign: 'left', paddingLeft: '5rem' }}>
-                                <Typography variant="h4" gutterBottom>
-                                    About
-                                </Typography>
-                                <Typography variant="h6" gutterBottom>
-                                    The data behind this project is Free, Open-source linked data that is mainted in MediaWiki Project,
-                                    Promote the rights and information about disability rights and related articles based on different regions
-                                </Typography>
-                            </div>
-                        </Grid>
-                        <Grid item xs={3}>
-                            <div style={{ textAlign: 'left' }}>
-                                <Card className={searchCssClass.card.root}>
-                                    <CardContent style={{ textAlign: 'left' }}>
-                                        <Typography variant="h4" gutterBottom>
-                                            Motivation
+                            <div style={{ paddingLeft: '1rem', }}>
+                                <Card className={classes.aboutCardRoot} style={{ height: '27rem' }}>
+                                    <CardActionArea>
+                                        <CardMedia
+                                            className={classes.aboutCardMedia}
+                                            image="/static/images/cards/contemplative-reptile.jpg"
+                                            title="Contemplative Reptile"
+                                        />
+                                        <CardContent style={{ textAlign: 'center' }}>
+                                            <TrackChangesIcon style={{ fontSize: '5rem' }} />
+                                            <Typography gutterBottom variant="h4" component="h2">
+                                                About
                                         </Typography>
-                                        <Typography variant="h6" gutterBottom>
-                                            Human rights monitoring for people with disabilities is in urgent need
-                                            Our aim is to use a Wikibase for editing, integrating and storing structured disability related data
-                                            Includes deliberation between content experts in critical disability and health informatics and computer science professionals
-
-                                </Typography>
-
-                                    </CardContent>
+                                            <Typography variant="h6" color="textPrimary" >
+                                                The data behind this project is Free, Open-source linked data that is mainted in MediaWiki Project,
+                                                Promote the rights and information about disability rights and related articles based on different regions
+                                        </Typography>
+                                        </CardContent>
+                                    </CardActionArea>
                                 </Card>
                             </div>
                         </Grid>
                         <Grid item xs={3}>
-                            <div style={{ textAlign: 'left' }}>
-                                <Card className={searchCssClass.card.root}>
-                                    <CardContent style={{ textAlign: 'left' }}>
-                                        <Typography variant="h4" gutterBottom>
-                                            Project
+                            <div >
+                                <Card className={classes.aboutCardRoot} style={{ height: '27rem' }}>
+                                    <CardActionArea>
+                                        <CardContent style={{ textAlign: 'center' }}>
+                                            <AccessibleForwardIcon style={{ fontSize: '5rem' }} />
+                                            <Typography gutterBottom variant="h4" component="h2">
+                                                Motivation
                                         </Typography>
-                                        <Typography variant="h6" gutterBottom>
-                                            Human rights monitoring for people with disabilities is in urgent need
-                                            Our aim is to use a Wikibase for editing, integrating and storing structured disability related data
-                                            Includes deliberation between content experts in critical disability and health informatics and computer science professionals
+                                            <Typography variant="h6" color="textPrimary" >
+                                                Human rights monitoring for people with disabilities is in urgent need
+                                                Our aim is to use a Wikibase for editing, integrating and storing structured disability related data
+                                                Includes deliberation between content experts in critical disability and health informatics and computer science professionals
 
-                                </Typography>
-
-                                    </CardContent>
+                                        </Typography>
+                                        </CardContent>
+                                    </CardActionArea>
                                 </Card>
                             </div>
                         </Grid>
                         <Grid item xs={3}>
-                            <div style={{ textAlign: 'left' }}>
-                                <Card className={searchCssClass.card.root}>
-                                    <CardContent style={{ textAlign: 'left' }}>
-                                        <Typography variant="h4" gutterBottom>
-                                            Goal
+                            <div>
+                                <Card className={classes.aboutCardRoot} style={{ height: '27rem' }}>
+                                    <CardActionArea>
+                                        <CardContent style={{ textAlign: 'center' }}>
+                                            <FundProjectionScreenOutlined style={{ fontSize: '5rem' }} />
+                                            <Typography gutterBottom variant="h4" component="h2">
+                                                Project
                                         </Typography>
-                                        <Typography variant="h6" gutterBottom>
-                                            Human rights monitoring for people with disabilities is in urgent need
-                                            Our aim is to use a Wikibase for editing, integrating and storing structured disability related data
-                                            Includes deliberation between content experts in critical disability and health informatics and computer science professionals
+                                            <Typography variant="h6" color="textPrimary" >
+                                                Human rights monitoring for people with disabilities is in urgent need
+                                                Our aim is to use a Wikibase for editing, integrating and storing structured disability related data
+                                                Includes deliberation between content experts in critical disability and health informatics and computer science professionals
 
-                                </Typography>
-
-                                    </CardContent>
+                                        </Typography>
+                                        </CardContent>
+                                    </CardActionArea>
+                                </Card>
+                            </div>
+                        </Grid>
+                        <Grid item xs={3}>
+                            <div >
+                                <Card className={classes.aboutCardRoot} style={{ marginRight: '1rem', height: '27rem' }}>
+                                    <CardActionArea>
+                                        <CardContent style={{ textAlign: 'center' }}>
+                                            <GroupIcon style={{ fontSize: '5rem' }} />
+                                            <Typography gutterBottom variant="h4" component="h2">
+                                                Team
+                                        </Typography>
+                                            <Typography variant="h6" color="textPrimary" >
+                                                Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
+                                                across all continents except Antarctica
+                                        </Typography>
+                                        </CardContent>
+                                    </CardActionArea>
                                 </Card>
                             </div>
                         </Grid>
@@ -247,16 +275,16 @@ const BodyContent = (props) => {
             <Divider style={{ marginTop: '3rem' }} />
             <div style={{ backgroundColor: '#e8eaed' }}>
                 <Grid container spacing={3} style={{ paddingTop: '3rem' }}>
-                    <Grid item xs={2}></Grid>
-                    <Grid item xs={2}>
+                    <Grid item xs={1}></Grid>
+                    <Grid item xs={3} style={{ paddingLeft: '3rem' }}>
                         <Paper elevation={3}  >
-                            <Card className={searchCssClass.card.root}>
+                            <Card className={searchCssClass.card.root} style={{ height: '4rem' }}>
                                 <CardActionArea>
                                     <CardContent>
-                                        <img style={{ height: '30px' }} src='/img/yu-logo.png' />
-                                        <Typography gutterBottom variant="h5" component="h2">
+                                        <img style={{ height: '3rem' }} src='/img/yu-logo.png' />
+                                        {/* <Typography gutterBottom variant="h5" component="h2">
                                             York Univesrity
-                                     </Typography>
+                                     </Typography> */}
                                     </CardContent>
                                 </CardActionArea>
                             </Card>
@@ -264,51 +292,42 @@ const BodyContent = (props) => {
                         </Paper>
 
                     </Grid>
-                    <Grid item xs={2}>
+                    <Grid item xs={3}>
                         <Paper elevation={3}  >
-                            <Card className={searchCssClass.card.root}>
+                            <Card className={searchCssClass.card.root} style={{ height: '4rem' }}>
                                 <CardActionArea>
                                     <CardContent>
-                                        <img style={{ height: '30px' }} src='/img/yu-logo.png' />
-                                        <Typography gutterBottom variant="h5" component="h2">
+                                        <img style={{ height: '3rem' }} src='/img/use-logo.png' />
+                                        {/* <Typography gutterBottom variant="h5" component="h2">
                                             York Univesrity
-                                     </Typography>
+                                     </Typography> */}
                                     </CardContent>
                                 </CardActionArea>
                             </Card>
+
                         </Paper>
+
                     </Grid>
-                    <Grid item xs={2}>
+                    <Grid item xs={3}>
                         <Paper elevation={3}  >
-                            <Card className={searchCssClass.card.root}>
+                            <Card className={searchCssClass.card.root} style={{ height: '4rem' }}>
                                 <CardActionArea>
                                     <CardContent>
-                                        <img style={{ height: '30px' }} src='/img/use-logo.png' />
-                                        <Typography gutterBottom variant="h5" component="h2">
-                                            Jean Monnet-Uni.
-                                     </Typography>
+                                        <img style={{ height: '3rem', width: '8rem' }} src='/img/qa-logo.png' />
+                                        {/* <Typography gutterBottom variant="h5" component="h2">
+                                            York Univesrity
+                                     </Typography> */}
                                     </CardContent>
                                 </CardActionArea>
                             </Card>
+
                         </Paper>
+
                     </Grid>
-                    <Grid item xs={2}>
-                        <Paper elevation={3}  >
-                            <Card className={searchCssClass.card.root}>
-                                <CardActionArea>
-                                    <CardContent>
-                                        <img style={{ height: '30px' }} src='/img/use-logo.png' />
-                                        <Typography gutterBottom variant="h5" component="h2">
-                                            Jean Monnet-Uni.
-                                     </Typography>
-                                    </CardContent>
-                                </CardActionArea>
-                            </Card>
-                        </Paper>
-                    </Grid>
+
                 </Grid>
             </div>
-
+            {/* <a href="http://www.freepik.com">Designed by pch.vector / Freepik</a> */}
         </div >
 
 

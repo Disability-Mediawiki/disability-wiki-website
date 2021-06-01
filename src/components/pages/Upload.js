@@ -30,10 +30,8 @@ const UploadFile = () => {
         //     //     headers: { 'Content-Type': 'multipart/form-data' }
         //     // })
         //     // .then((res: any) => {
-        //     //     debugger
         //     // })
         //     // .catch((err: any) => {
-        //     //     debugger
         //     // });
 
         //     const data = new FormData()
@@ -42,23 +40,21 @@ const UploadFile = () => {
         //         // receive two    parameter endpoint url ,form data
         //     })
         //         .then((res: any) => {
-        //             debugger
         //         })
         //         .catch((err: any) => {
-        //             debugger
         //         });
 
         // },
         onChange(info) {
-            debugger
+
             if (info.file.status !== 'uploading') {
                 console.log(info.file, info.fileList);
             }
             if (info.file.status === 'done') {
-                debugger
+
                 message.success(`${info.file.name} file uploaded successfully`);
             } else if (info.file.status === 'error') {
-                debugger
+
                 message.error(`${info.file.name} file upload failed.`);
             }
         },

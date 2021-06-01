@@ -41,7 +41,7 @@ import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import PublicIcon from '@material-ui/icons/Public';
 import GavelIcon from '@material-ui/icons/Gavel';
 import PlaceIcon from '@material-ui/icons/Place';
-
+import BottomNavigation from '@material-ui/core/BottomNavigation';
 
 import {
     BrowserRouter as Router,
@@ -54,7 +54,7 @@ import {
     withRouter,
     useHistory
 } from "react-router-dom";
-import SearchHome from '../components/search/SearchHome'
+// import SearchHome from '../components/search/SearchHome'
 import SearchResult from './SearchResult/SearchResult'
 import QASearch from './SearchResult/QASearch'
 import LoginPage from './Login/LoginPage'
@@ -151,7 +151,7 @@ const MainView = (props) => {
 
             <Header
                 // <div style={{ marginLeft: '-20rem' }}>Disability Wiki</div>
-                brand="DISABILITY WIKI RIGHTS"
+                brand="DISABILITY WIKI"
                 rightLinks={<HeaderLinks />}
                 fixed
 
@@ -172,7 +172,11 @@ const MainView = (props) => {
             </Switch>
 
 
-
+            {/* <BottomNavigation
+                showLabels
+                style={{ width: '100%' }}
+            >
+            </BottomNavigation> */}
         </div >
 
 

@@ -67,7 +67,7 @@ class QASearch extends React.Component {
             'Graph': <p>content3</p>,
         };
         this.setState({ contentList })
-        debugger
+
         if (this.props.location.state && this.props.location.state.keyword !== '') {
             this.setState({ searchKey: this.props.location.state.keyword })
             this.onSearch(this.props.location.state.keyword)
@@ -93,7 +93,7 @@ class QASearch extends React.Component {
             })
             .catch(err => {
                 console.log(err)
-                debugger
+
             })
     }
     onSelect = (data) => {
@@ -116,14 +116,14 @@ class QASearch extends React.Component {
             })
             .catch(err => {
                 console.log(err)
-                debugger
+
             })
     }
     handleMenuClick(value) {
 
     }
     onTabChange = (key, type) => {
-        debugger
+
         console.log(key, type);
         this.setState({ [type]: key });
     };
@@ -170,7 +170,8 @@ class QASearch extends React.Component {
         return (
             <div
                 style={{
-                    backgroundImage: `url(/img/blog-work-dis.png)`,
+                    // backgroundImage: `url(/img/blog-work-dis.png)`,
+                    backgroundImage: `url(/img/3715.jpg)`,
                     backgroundPosition: 'center',
                     backgroundSize: 'cover',
                     backgroundRepeat: 'no-repeat',

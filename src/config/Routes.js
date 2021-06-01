@@ -7,8 +7,6 @@ import {
     Link,
     Redirect
 } from "react-router-dom";
-import SearchHome from '../components/search/SearchHome'
-// import Home from '../components/Home'
 import ApplicationRoutes from './ApplicationRoutes'
 import { createBrowserHistory } from "history";
 import MainView from '../pub-website/MainView'
@@ -27,7 +25,7 @@ const WithContainer = () => (
 
     // </div>
     <div>
-        <Route exact path="/search" component={SearchHome} />
+        {/* <Route exact path="/search" component={SearchHome} /> */}
     </div>
 
 )

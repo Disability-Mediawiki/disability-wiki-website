@@ -1,13 +1,11 @@
-import React from 'react';
-import { Menu } from 'antd';
 import {
-    UserOutlined,
-    SolutionOutlined,
-    FilePdfOutlined,
-    UploadOutlined,
+    FilePdfOutlined, SolutionOutlined,
+    UploadOutlined
 } from '@ant-design/icons';
+import { Menu } from 'antd';
+import React from 'react';
 import { useHistory } from 'react-router';
-import AuthService from '../../services/AuthService'
+import AuthService from '../../services/AuthService';
 
 const SideNav = (props) => {
     const history = useHistory();
@@ -41,8 +39,8 @@ const SideNav = (props) => {
                 {/* <img src={process.env.PUBLIC_URL + '/public/dis-logo.png'} /> */}
                 {
                     props.collapse
-                        ? <img src="/img/logo-graph.png" style={{ marginTop: "-2.6rem", height: "9.5rem", marginLeft: "-2.2rem" }} />
-                        : <img src="/img/dis-logo2.png" style={{ marginTop: "-4rem", height: "11rem" }} />
+                        ? <img src="/img/logo-graph.png" alt="side logo" style={{ marginTop: "-2.6rem", height: "9.5rem", marginLeft: "-2.2rem" }} />
+                        : <img src="/img/dis-logo2.png" alt="side logo min" style={{ marginTop: "-4rem", height: "11rem" }} />
                 }
 
             </div>

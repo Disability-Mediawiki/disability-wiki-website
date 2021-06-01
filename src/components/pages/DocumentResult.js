@@ -1,19 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Row, Col, Button, Tooltip, Typography, Input, Popconfirm, Form, Modal } from 'antd';
-
-import { useHistory } from 'react-router';
-import axios from 'axios';
-import { Menu, Dropdown } from 'antd';
-import Chip from '@material-ui/core/Chip';
-import Avatar from '@material-ui/core/Avatar';
-import AddBoxIcon from '@material-ui/icons/AddBox';
-import TextField from '@material-ui/core/TextField';
 import { DownOutlined } from '@ant-design/icons';
+import Avatar from '@material-ui/core/Avatar';
+import Chip from '@material-ui/core/Chip';
+import AddBoxIcon from '@material-ui/icons/AddBox';
+import { AutoComplete, Button, Col, Dropdown, Menu, Modal, Popconfirm, Row, Table, Typography } from 'antd';
+import axios from 'axios';
+import { useHistory } from 'react-router';
+import DiswikiApi from '../../services/DiswikiApi';
+import { message } from 'antd';
 
-import { SearchOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
-import EditableTable from '../layouts/TableLayout'
-import DiswikiApi from '../../services/DiswikiApi'
-import { AutoComplete } from 'antd';
+import { CloudUploadOutlined } from '@ant-design/icons';
 
 const { Option } = AutoComplete;
 const { Title } = Typography;
@@ -25,7 +21,9 @@ const DocumentResult = () => {
     const [fileList, setFileList] = useState([]);
     const [selectedRow, setSelectedRow] = useState({});
     const [isModalVisible, setModalVisible] = useState(false);
+    const [isClassificationSaved, setIsClassificationSaved] = useState(0);
     const [newTagName, setNewTagName] = useState('');
+    const [selectedDocument, setSelectedDocument] = useState({});
     const [glossaryTags, setGlossaryTag] = useState([]);
     const [trainingData, setTrainingData] = useState([]);
     const [tableDataEditLogs, setTableDataEditLog] = useState([]);
@@ -41,97 +39,6 @@ const DocumentResult = () => {
 
     }, []);
 
-
-    const getDocumentList = () => {
-        DiswikiApi.getDocumentListPending()
-            .then(res => {
-                setFileList(res.data)
-            }).catch(err => {
-                console.warn(err)
-            })
-    }
-
-    const getGlossaryList = () => {
-        DiswikiApi.getGlossaryListFlat()
-            .then(res => {
-                setGlossaryTag(res.data)
-            }).catch(err => {
-                console.warn(err)
-            })
-    }
-
-    // const getActionButton = (key) => {
-    //     return (
-    //         <Row>
-    //             <Tooltip title="Correct" >
-    //                 <Button shape="circle" style={{ color: "green" }} icon={<CheckCircleOutlined />} />
-    //             </Tooltip>
-    //             <Tooltip title="Wrong" style={{ marginLeft: "3rem" }}>
-    //                 <Button shape="circle" style={{ color: "red" }} icon={<CloseCircleOutlined />} />
-    //             </Tooltip>
-    //         </Row>
-
-    //     )
-    // }
-    const getFileResult = (fileName) => {
-
-        if (!fileName) return;
-        axios.get(`http://localhost:5000/api/file/download`,
-            // { params: { 'file_name': 'classified 2.csv' } })
-            { params: { 'file_name': fileName } })
-            .then(res => {
-                let tbData = []
-                if (res.status === 200) {
-                    res.data.forEach((data, index) => {
-                        tbData.push({
-                            "tags": data.tag,
-                            "paragraph": data.paragraph,
-                            "key": index + "file_list"
-                        })
-                    })
-                    setTableData(tbData);
-                }
-            })
-            .catch(err => console.warn(err));
-    }
-    const getClassifiedResults = (fileName) => {
-        if (!fileName) return;
-        DiswikiApi.getClassificationResult('classified 2.csv')
-            .then(res => {
-                let tbData = []
-                if (res.status === 200) {
-                    res.data.forEach((data, index) => {
-                        tbData.push({
-                            "tags": data.tag,
-                            "paragraph": data.paragraph,
-                            "key": index + "glossary_data",
-                            "id": data.id
-                        })
-                    })
-                    setTableData(tbData);
-                }
-            })
-            .catch(err => console.warn(err));
-    }
-    const handleClick = () => {
-        history.push('/form')
-    }
-    function handleFileClick(e) {
-
-        getFileResult(fileList[e.key])
-    }
-
-    const getFileList = () => {
-        return (< Menu onClick={handleFileClick} >{
-            fileList.map((item, index) => {
-                return (
-                    <Menu.Item key={item.key + "file_list"} disabled={(item.status === 'processing')}>
-                        {item.name}
-                    </Menu.Item>
-                )
-            })
-        }</Menu >)
-    }
     const columns = [
         {
             title: 'ID',
@@ -204,10 +111,143 @@ const DocumentResult = () => {
                 ) : null,
         },
     ];
+
+    const getFileList = () => {
+        return (< Menu onClick={handleFileClick} >{
+            fileList.map((item, index) => {
+                return (
+                    // 
+                    <Menu.Item key={item.key + "file_list"} document={item} disabled={(item.status === 'processing')}>
+                        {item.name}
+                    </Menu.Item>
+                )
+            })
+        }</Menu >)
+    }
+
+
+    const getDocumentList = () => {
+        DiswikiApi.getDocumentListPending()
+            .then(res => {
+                setFileList(res.data)
+            }).catch(err => {
+                console.warn(err)
+            })
+    }
+
+    const getGlossaryList = () => {
+        DiswikiApi.getGlossaryListFlat()
+            .then(res => {
+                setGlossaryTag(res.data)
+            }).catch(err => {
+                console.warn(err)
+            })
+    }
+
+    // const getActionButton = (key) => {
+    //     return (
+    //         <Row>
+    //             <Tooltip title="Correct" >
+    //                 <Button shape="circle" style={{ color: "green" }} icon={<CheckCircleOutlined />} />
+    //             </Tooltip>
+    //             <Tooltip title="Wrong" style={{ marginLeft: "3rem" }}>
+    //                 <Button shape="circle" style={{ color: "red" }} icon={<CloseCircleOutlined />} />
+    //             </Tooltip>
+    //         </Row>
+
+    //     )
+    // }
+    const getFileResult = (id) => {
+
+        if (!id) return;
+        DiswikiApi.getClassificationResult(id)
+
+            .then(res => {
+                let tbData = []
+                if (res.status === 200) {
+
+                    if ('classification_id' in res.data[0]) {
+                        setIsClassificationSaved(1);
+                        res.data.forEach((data, index) => {
+                            tbData.push({
+                                "tags": data.tag,
+                                "classification_id": data.classification_id,
+                                "paragraph": data.paragraph,
+                                "key": index + "_classification_data"
+                            })
+                        })
+                    } else {
+                        setIsClassificationSaved(0);
+                        res.data.forEach((data, index) => {
+                            tbData.push({
+                                "tags": data.tag,
+                                "paragraph": data.paragraph,
+                                "key": index + "_classification_data"
+                            })
+                        })
+                    }
+
+                    setTableData(tbData);
+                }
+                else {
+                    console.warn(res)
+                    setIsClassificationSaved(0);
+                }
+            })
+            .catch(err => {
+                console.warn(err)
+                setIsClassificationSaved(0);
+            });
+    }
+    const getClassifiedResults = (fileName) => {
+        if (!fileName) return;
+        // DiswikiApi.getClassificationResult('classified 2.csv')
+        DiswikiApi.getClassificationResult('CRPD.pdf')
+            .then(res => {
+                let tbData = []
+                if (res.status === 200) {
+                    if ('classification_id' in res.data[0]) {
+                        setIsClassificationSaved(1);
+                        res.data.forEach((data, index) => {
+                            tbData.push({
+                                "classification_id": data.classification_id,
+                                "tags": data.tag,
+                                "paragraph": data.paragraph,
+                                "key": index + "_classification_data",
+                                "id": data.id
+                            })
+                        })
+                    } else {
+                        setIsClassificationSaved(0);
+                        res.data.forEach((data, index) => {
+                            tbData.push({
+                                "tags": data.tag,
+                                "paragraph": data.paragraph,
+                                "key": index + "_classification_data",
+                            })
+                        })
+                    }
+                    setTableData(tbData);
+                }
+            })
+            .catch(err => console.warn(err));
+    }
+    const handleClick = () => {
+        history.push('/form')
+    }
+    function handleFileClick(e) {
+        if (e.item.props.document) {
+            // getFileResult(fileList[e.key])
+            getFileResult(e.item.props.document.id)
+        }
+
+    }
+
+
     // TAG functions
 
     const handleTagDelete = (record, tag) => {
-        debugger
+
         const dataSource = [...tableData];
         let index = dataSource.indexOf(record);
         dataSource[index].tags = dataSource[index].tags.filter((item) => item !== tag)
@@ -218,7 +258,7 @@ const DocumentResult = () => {
             setTableDataEditLog(tableDataEditLogs)
         } else {
             tableDataEditLogs.push({
-                'type': 'delete_tag', 'row_id': selectedRow.id,
+                'type': 'delete_tag', 'row_id': record.id,
                 'data': tag.text
             })
             setTableDataEditLog(tableDataEditLogs)
@@ -262,7 +302,7 @@ const DocumentResult = () => {
         setModalVisible(!isModalVisible)
     }
     const handleAddNewTagOk = () => {
-        debugger
+
         setModalVisible(false)
         if (!newTagName) {
             return
@@ -297,23 +337,59 @@ const DocumentResult = () => {
     };
     //TAG FUNCTION
 
+    const handleUploadEdit = (value) => {
+        // DiswikiApi.uploadWikiEditRequest(selectedDocument).
+        DiswikiApi.uploadWikiEditRequest(fileList[0]).
+            then(res => {
+                setIsClassificationSaved(1)
+                message.success({
+                    content: 'Successfully upload request created',
+                    className: 'custom-class',
+                    style: {
+                        marginTop: '4vh',
+                    },
+                });
+            }).catch(err =>
+                message.error({
+                    content: 'Internal error : ' + err,
+                    className: 'custom-class',
+                    style: {
+                        marginTop: '4vh',
+                    },
+                })
+            )
+    }
     const handleSaveEdit = (value) => {
-        debugger
+
         let payload = {
             "edit": {
                 'classification_data': tableData,
                 'training_data': trainingData,
-                'table_edit_log': tableDataEditLogs
+                'table_edit_log': tableDataEditLogs,
+                'is_saved': isClassificationSaved,
             },
             'document_name': 'CRPD.pdf'
         }
         DiswikiApi.updateCLassificationEdit(payload).
             then(res => {
-                debugger
-                console.log(res)
-            }).catch(err => console.log(err))
-        // console.log(trainingData)
-        // console.log(tableDataEditLogs)
+                setIsClassificationSaved(1)
+                setTableDataEditLog([]);
+                message.success({
+                    content: 'Successfully saved',
+                    className: 'custom-class',
+                    style: {
+                        marginTop: '4vh',
+                    },
+                });
+            }).catch(err =>
+                message.error({
+                    content: 'Internal error : ' + err,
+                    className: 'custom-class',
+                    style: {
+                        marginTop: '4vh',
+                    },
+                })
+            )
 
     }
     const handleGlossaryChange = (value, option) => {
@@ -349,7 +425,6 @@ const DocumentResult = () => {
                 <Col span={2}>
                     <Button
                         onClick={handleSaveEdit}
-                        type="primary"
                         style={{
                             marginBottom: 16,
                         }}
@@ -357,6 +432,11 @@ const DocumentResult = () => {
                     >
                         Save Edits
                 </Button>
+                </Col>
+                <Col span={4}>
+                    <Button type="primary" onClick={handleUploadEdit} shape="round" icon={<CloudUploadOutlined />} size={'default'}>
+                        Uploads to Wikibase
+                     </Button>
                 </Col>
             </Row>
             <Row gutter={[40, 0]}>

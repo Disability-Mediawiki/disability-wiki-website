@@ -134,7 +134,6 @@ const RegisterPage = (props) => {
                 <p className={classes.divider}>Disability Wiki Create-User</p>
                 <CardBody>
                     <Input
-                        fullWidth='true'
                         inputProps={{
                             'aria-label': 'Username',
                         }}
@@ -153,7 +152,6 @@ const RegisterPage = (props) => {
                         }
                     />
                     <Input
-                        fullWidth='true'
                         inputProps={{
                             'aria-label': 'Email',
                         }}
@@ -174,7 +172,6 @@ const RegisterPage = (props) => {
                     <Input
                         placeholder="Password"
                         id="standard-adornment-password"
-                        fullWidth='true'
                         style={{ marginTop: '1rem' }}
 
                         inputProps={{
@@ -198,7 +195,6 @@ const RegisterPage = (props) => {
                     <Input
                         placeholder="Confirm Password"
                         id="standard-adornment-password"
-                        fullWidth='true'
                         style={{ marginTop: '1rem', marginBottom: '1rem' }}
 
                         inputProps={{

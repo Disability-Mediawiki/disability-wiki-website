@@ -1,47 +1,31 @@
-import React, { useEffect, useState } from "react";
-// @material-ui/core components
-
-import { useHistory } from "react-router-dom";
-import { makeStyles } from "@material-ui/core/styles";
+import Box from '@material-ui/core/Box';
+import IconButton from '@material-ui/core/IconButton';
+import Input from '@material-ui/core/Input';
 import InputAdornment from "@material-ui/core/InputAdornment";
-import Icon from "@material-ui/core/Icon";
+import Paper from '@material-ui/core/Paper';
+import { makeStyles } from "@material-ui/core/styles";
+import Tab from '@material-ui/core/Tab';
+import Tabs from '@material-ui/core/Tabs';
 // @material-ui/icons
 import Email from "@material-ui/icons/Email";
-import TextField from '@material-ui/core/TextField';
-import Input from '@material-ui/core/Input';
-import IconButton from '@material-ui/core/IconButton';
-
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import People from "@material-ui/icons/People";
-// core components
-import Header from "../Header/Header.js";
-import HeaderLinks from "../Header/HeaderLinks.js";
+import { message } from 'antd';
+import PropTypes from 'prop-types';
+import React, { useState } from "react";
+// @material-ui/core components
+import { useHistory } from "react-router-dom";
+import AuthService from '../../services/AuthService';
+import styles from "../assets/jss/material-kit-react/views/loginPage.js";
+import Card from "../components/Card/Card.js";
+import CardBody from "../components/Card/CardBody.js";
+import CardFooter from "../components/Card/CardFooter.js";
+import CardHeader from "../components/Card/CardHeader.js";
+import Button from "../components/CustomButtons/Button.js";
 // import Footer from "../components/Footer/Footer.js";
 import GridContainer from "../Grid/GridContainer.js";
 import GridItem from "../Grid/GridItem.js";
-import Button from "../components/CustomButtons/Button.js";
-import Card from "../components/Card/Card.js";
-import CardBody from "../components/Card/CardBody.js";
-import CardHeader from "../components/Card/CardHeader.js";
-import CardFooter from "../components/Card/CardFooter.js";
-import CustomInput from "../components/CustomInput/CustomInput.js";
-import LockOpenIcon from '@material-ui/icons/LockOpen';
-import styles from "../assets/jss/material-kit-react/views/loginPage.js";
-import Link from '@material-ui/core/Link';
-// import image from "assets/img/bg7.jpg";
-// import image from "/img/blog-work-dis.png";
-import DiswikiApi from '../../services/DiswikiApi';
-import AuthService from '../../services/AuthService';
-import { message } from 'antd';
-import Paper from '@material-ui/core/Paper';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import PropTypes from 'prop-types';
-import Box from '@material-ui/core/Box';
-
 import RegisterPage from './RegisterPage';
-
 
 
 const useStyles = makeStyles(styles);
@@ -72,12 +56,7 @@ TabPanel.propTypes = {
   value: PropTypes.any.isRequired,
 };
 
-function a11yProps(index) {
-  return {
-    id: `scrollable-auto-tab-${index}`,
-    'aria-controls': `scrollable-auto-tabpanel-${index}`,
-  };
-}
+
 
 const LoginPage = (props) => {
   const [cardAnimaton, setCardAnimation] = React.useState("cardHidden");
@@ -95,7 +74,7 @@ const LoginPage = (props) => {
   const { ...rest } = props;
 
   const loginAlert = (type, msg) => {
-    if (type == 'success') {
+    if (type === 'success') {
       message.success({
         content: 'Successfully loged in',
         className: 'custom-class',
@@ -104,7 +83,7 @@ const LoginPage = (props) => {
         },
       });
     }
-    if (type == 'logout') {
+    if (type === 'logout') {
       message.success({
         content: 'Successfully logged out ',
         className: 'custom-class',
@@ -113,7 +92,7 @@ const LoginPage = (props) => {
         },
       });
     }
-    else if (type == 'required') {
+    else if (type === 'required') {
       message.warn({
         content: 'Required username and password : ',
         className: 'custom-class',
@@ -122,7 +101,16 @@ const LoginPage = (props) => {
         },
       });
     }
-    else if (type == 'error') {
+    else if (type === 'not-found') {
+      message.warn({
+        content: 'User not exist, Create a user account ',
+        className: 'custom-class',
+        style: {
+          marginTop: '4vh',
+        },
+      });
+    }
+    else if (type === 'error') {
       message.error({
         content: 'Something went wrong ' + msg,
         className: 'custom-class',
@@ -137,16 +125,25 @@ const LoginPage = (props) => {
     if (userName && password) {
       AuthService.login_dis_wiki(userName, password)
         .then(res => {
-          window.sessionStorage.setItem("userConfig", JSON.stringify(res.data));
-          window.sessionStorage.setItem("userName", res.data.username);
-          loginAlert("success")
-          history.push('/admin')
+          debugger
+          if (res.status === 200) {
+            window.sessionStorage.setItem("userConfig", JSON.stringify(res.data));
+            window.sessionStorage.setItem("userName", res.data.username);
+            loginAlert("success")
+            history.push('/admin')
+          }
+
         })
-        .catch(err => loginAlert("error", err))
+        .catch(err => {
+          if (err.response.status === 401)
+            loginAlert("not-found")
+          else
+            loginAlert("error", err)
+        })
     } else {
       loginAlert("required")
     }
-    // debugger
+
   }
   const handleForgotPasswordClick = (e) => {
 
@@ -157,12 +154,8 @@ const LoginPage = (props) => {
   const handlePasswordChange = (e) => {
     setPassword(e.target.value)
   }
-  const handleLogoClick = (e) => {
-    debugger
-    props.history.push('/')
-  }
+
   const handleClickShowPassword = (e) => {
-    debugger
     setShowPassword(!showPassword);
   }
   const handleTabChange = (event, newValue) => {
@@ -175,7 +168,8 @@ const LoginPage = (props) => {
         className={classes.pageHeader}
         style={{
           // backgroundImage: '/img/blog-work-dis.png',
-          backgroundImage: "url(/img/blog-work-dis.png)",
+          // backgroundImage: "url(/img/blog-work-dis.png)",
+          backgroundImage: "url(/img/3715.jpg)",
           backgroundSize: "cover",
           backgroundPosition: "top center"
         }}
@@ -269,7 +263,6 @@ const LoginPage = (props) => {
           </GridContainer>
 
         </div>
-        {/* <Footer whiteFont /> */}
       </div>
     </div>
   );

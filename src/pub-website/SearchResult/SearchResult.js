@@ -106,7 +106,7 @@ const SearchResult = (props) => {
     const [selectedConcept, setSelectedConcept] = useState(null);
     const [pagination, setPagination] = useState({ 'status': false });
     useEffect(() => {
-        debugger
+
         // console.log(porps.hostory..location.state.keyword)
         if (history.location.state.keyword && history.location.state.keyword !== '') {
             setSearchTerm(history.location.state.keyword)

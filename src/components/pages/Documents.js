@@ -76,10 +76,10 @@ const Documents = () => {
     ];
 
     const onDownload = (record) => {
-        debugger
+
         DiswikiApi.donwloadDocument(record.name)
             .then(res => {
-                debugger
+
                 const url = window.URL.createObjectURL(new Blob([res.data]));
                 const link = document.createElement('a');
                 link.href = url;
