@@ -30,13 +30,8 @@ const DocumentResult = () => {
     const [selectedGlossary, setSelectedGlossary] = useState({});
 
     useEffect(() => {
-        // getFiles();
         getDocumentList();
-        // getFileResult('asd');
-        getClassifiedResults('asd')
         getGlossaryList()
-
-
     }, []);
 
     const columns = [
@@ -127,53 +122,52 @@ const DocumentResult = () => {
 
 
     const getDocumentList = () => {
+        setTableData([]);
         DiswikiApi.getDocumentListPending()
             .then(res => {
                 setFileList(res.data)
-            }).catch(err => {
-                console.warn(err)
-            })
+            }).catch(err =>
+                message.error({
+                    content: 'Internal error : ' + err,
+                    className: 'custom-class',
+                    style: {
+                        marginTop: '4vh',
+                    },
+                })
+            )
     }
 
     const getGlossaryList = () => {
         DiswikiApi.getGlossaryListFlat()
             .then(res => {
                 setGlossaryTag(res.data)
-            }).catch(err => {
-                console.warn(err)
-            })
+            }).catch(err =>
+                message.error({
+                    content: 'Internal error : ' + err,
+                    className: 'custom-class',
+                    style: {
+                        marginTop: '4vh',
+                    },
+                })
+            )
     }
 
-    // const getActionButton = (key) => {
-    //     return (
-    //         <Row>
-    //             <Tooltip title="Correct" >
-    //                 <Button shape="circle" style={{ color: "green" }} icon={<CheckCircleOutlined />} />
-    //             </Tooltip>
-    //             <Tooltip title="Wrong" style={{ marginLeft: "3rem" }}>
-    //                 <Button shape="circle" style={{ color: "red" }} icon={<CloseCircleOutlined />} />
-    //             </Tooltip>
-    //         </Row>
 
-    //     )
-    // }
-    const getFileResult = (id) => {
-
-        if (!id) return;
-        DiswikiApi.getClassificationResult(id)
-
+    const getFileResult = (document) => {
+        if (!document) return;
+        DiswikiApi.getClassificationResult(document.name, document.id)
             .then(res => {
                 let tbData = []
                 if (res.status === 200) {
-
                     if ('classification_id' in res.data[0]) {
                         setIsClassificationSaved(1);
                         res.data.forEach((data, index) => {
                             tbData.push({
-                                "tags": data.tag,
                                 "classification_id": data.classification_id,
+                                "tags": data.tag,
                                 "paragraph": data.paragraph,
-                                "key": index + "_classification_data"
+                                "key": index + "_classification_data",
+                                "id": data.id
                             })
                         })
                     } else {
@@ -182,26 +176,28 @@ const DocumentResult = () => {
                             tbData.push({
                                 "tags": data.tag,
                                 "paragraph": data.paragraph,
-                                "key": index + "_classification_data"
+                                "key": index + "_classification_data",
                             })
                         })
                     }
-
                     setTableData(tbData);
-                }
-                else {
-                    console.warn(res)
-                    setIsClassificationSaved(0);
                 }
             })
             .catch(err => {
-                console.warn(err)
                 setIsClassificationSaved(0);
-            });
+                message.error({
+                    content: 'Internal error : ' + err,
+                    className: 'custom-class',
+                    style: {
+                        marginTop: '4vh',
+                    },
+                })
+            })
     }
+
+
     const getClassifiedResults = (fileName) => {
         if (!fileName) return;
-        // DiswikiApi.getClassificationResult('classified 2.csv')
         DiswikiApi.getClassificationResult('CRPD.pdf')
             .then(res => {
                 let tbData = []
@@ -230,17 +226,24 @@ const DocumentResult = () => {
                     setTableData(tbData);
                 }
             })
-            .catch(err => console.warn(err));
+            .catch(err =>
+                message.error({
+                    content: 'Internal error : ' + err,
+                    className: 'custom-class',
+                    style: {
+                        marginTop: '4vh',
+                    },
+                })
+            );
     }
     const handleClick = () => {
         history.push('/form')
     }
-    function handleFileClick(e) {
-        if (e.item.props.document) {
-            // getFileResult(fileList[e.key])
-            getFileResult(e.item.props.document.id)
-        }
 
+    function handleFileClick(e) {
+        if (e.item && e.item.props && e.item.props.document) {
+            getFileResult(e.item.props.document)
+        }
     }
 
 
@@ -275,26 +278,7 @@ const DocumentResult = () => {
         tableDataEditLogs.push({ 'type': 'delete_row', 'row_id': record.id })
         setTableDataEditLog(tableDataEditLogs)
     };
-    const handleAdd = () => {
-        // const { count, dataSource } = this.state;
-        // const newData = {
-        //     paragraph: `paragraph`,
-        //     tags: ['tags']
-        // };
-        // this.setState({
-        //     dataSource: [...dataSource, newData],
-        //     count: count + 1,
-        // });
-    };
-    const handleSave = (row) => {
-        // const newData = [...this.state.dataSource];
-        // const index = newData.findIndex((item) => row.key === item.key);
-        // const item = newData[index];
-        // newData.splice(index, 1, { ...item, ...row });
-        // this.setState({
-        //     dataSource: newData,
-        // });
-    };
+
     const handleTagNameChange = (e) => {
         setNewTagName(e.target.value)
     }
@@ -341,7 +325,7 @@ const DocumentResult = () => {
         // DiswikiApi.uploadWikiEditRequest(selectedDocument).
         DiswikiApi.uploadWikiEditRequest(fileList[0]).
             then(res => {
-                setIsClassificationSaved(1)
+                setIsClassificationSaved(0)
                 message.success({
                     content: 'Successfully upload request created',
                     className: 'custom-class',
@@ -349,6 +333,7 @@ const DocumentResult = () => {
                         marginTop: '4vh',
                     },
                 });
+                getDocumentList();
             }).catch(err =>
                 message.error({
                     content: 'Internal error : ' + err,

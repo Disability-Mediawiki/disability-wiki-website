@@ -121,11 +121,9 @@ const LoginPage = (props) => {
     }
   }
   const handleLoginClick = (e) => {
-    // history.push('/admin')
     if (userName && password) {
       AuthService.login_dis_wiki(userName, password)
         .then(res => {
-          debugger
           if (res.status === 200) {
             window.sessionStorage.setItem("userConfig", JSON.stringify(res.data));
             window.sessionStorage.setItem("userName", res.data.username);
@@ -135,7 +133,8 @@ const LoginPage = (props) => {
 
         })
         .catch(err => {
-          if (err.response.status === 401)
+          debugger
+          if (err.response && err.response.status === 401)
             loginAlert("not-found")
           else
             loginAlert("error", err)

@@ -30,6 +30,7 @@ const Documents = () => {
     const [allData, setAllData] = useState([]);
     const [tableData, setTableData] = useState([]);
     const [fileList, setFileList] = useState([]);
+    const [selectedFile, setSelectedFile] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
     useEffect(() => {
         getFiles();
@@ -40,6 +41,7 @@ const Documents = () => {
             .then(res => {
                 setTableData(res.data);
             }).catch(err => {
+                debugger
                 console.log(err)
             })
     }
@@ -89,6 +91,8 @@ const Documents = () => {
             })
     }
     const onView = (record) => {
+        debugger
+        setSelectedFile(record)
         setModalVisible(true)
     }
     const getActionButton = (record) => {
@@ -102,7 +106,7 @@ const Documents = () => {
                     {/* <Button shape="circle" style={{ color: "red" }} icon={<CloudDownloadOutlined key={record.id + "download"} />} >
                         <a href={`http://localhost:5000/api/file/download-document?file_name=${record.name}`}></a>
                     </Button> */}
-                    <Link style={{ marginLeft: '1rem', marginTop: '0.4rem' }} href={`http://localhost:5000/api/file/download-document?file_name=${record.name}`} onClick={e => { }} target="_blank"  >
+                    <Link style={{ marginLeft: '1rem', marginTop: '0.4rem' }} href={`http://qanswer-core1.univ-st-etienne.fr/api/file/download-document?file_name=${record.name}`} onClick={e => { }} target="_blank"  >
                         <CloudDownloadOutlined key={record.id + "download"} />
                     </Link>
                     {/* <Routinglink style={{ marginLeft: '1rem', marginTop: '0.4rem' }} to={`http://localhost:5000/api/file/download-document?file_name=${record.name}`} target="_blank"><CloudDownloadOutlined key={record.id + "download"} /></Routinglink> */}
@@ -146,7 +150,7 @@ const Documents = () => {
                         <Grid container spacing={3}>
                             <Grid item xs={12}>
                                 <Paper className={classes.paper}>
-                                    <PdfViewer />
+                                    <PdfViewer file_name={selectedFile.name} />
                                 </Paper>
                             </Grid>
                         </Grid>

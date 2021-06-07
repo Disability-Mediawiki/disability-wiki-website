@@ -23,22 +23,20 @@ class DiswikiApi {
                 'Authorization': `Bearer ${JSON.parse(window.sessionStorage.getItem('userConfig')).auth_token}`
             }
         }
-        return axios.post(`http://localhost:5000/api/file/upload`, formData,
+        // return axios.post(`http://localhost:5000/api/file/upload`, formData,
+        return axios.post(`${API_HOST}file/upload`, formData,
             config
         )
 
     }
-    getClassificationResult(fileName) {
+    getClassificationResult(document_name, document_id) {
         const headers = {
             'Authorization': `Bearer ${JSON.parse(window.sessionStorage.getItem('userConfig')).auth_token}`
         }
         return axios.get(`${API_HOST}doc-classifiy/download`,
             {
-                params: { 'file_name': fileName }, headers
+                params: { 'document_name': document_name, 'document_id': document_id }, headers
             })
-        // axios.get(`http://localhost:5000/api/file/get-document-result`,
-        //     // { params: { 'file_name': 'classified 2.csv' } })
-        //     { params: { 'document_id': id } })
     }
     getDocumentList() {
         const config = {

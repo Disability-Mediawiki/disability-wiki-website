@@ -239,10 +239,7 @@ const BodyContent = (props) => {
                                                 Project
                                         </Typography>
                                             <Typography variant="h6" color="textPrimary" >
-                                                Human rights monitoring for people with disabilities is in urgent need
-                                                Our aim is to use a Wikibase for editing, integrating and storing structured disability related data
-                                                Includes deliberation between content experts in critical disability and health informatics and computer science professionals
-
+                                                Promote the convention and information about disability rights and related articles based on different regions
                                         </Typography>
                                         </CardContent>
                                     </CardActionArea>
@@ -259,8 +256,7 @@ const BodyContent = (props) => {
                                                 Team
                                         </Typography>
                                             <Typography variant="h6" color="textPrimary" >
-                                                Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                                                across all continents except Antarctica
+                                                French-Canadian project with contribution of York University (Canada), University Jean Monnet (France) and QA-Company (France)
                                         </Typography>
                                         </CardContent>
                                     </CardActionArea>
