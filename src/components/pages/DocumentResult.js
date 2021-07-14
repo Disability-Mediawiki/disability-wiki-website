@@ -242,6 +242,7 @@ const DocumentResult = () => {
 
     function handleFileClick(e) {
         if (e.item && e.item.props && e.item.props.document) {
+            setSelectedDocument(e.item.props.document)
             getFileResult(e.item.props.document)
         }
     }
@@ -304,7 +305,7 @@ const DocumentResult = () => {
         else {
             tableData[index].tags.push({ 'text': newTagName, 'new': true })
             trainingData.push({ "paragraph": selectedRow.paragraph, "tag": newTagName })
-            tableDataEditLogs.push({ 'type': 'add_tag', 'row_id': selectedRow.id, 'data': newTagName })
+            tableDataEditLogs.push({ 'type': 'add_tag', 'row_id': selectedRow.id, 'new': 1, 'data': newTagName })
             setTableDataEditLog(tableDataEditLogs)
             setTrainingData(trainingData);
         }
@@ -322,8 +323,7 @@ const DocumentResult = () => {
     //TAG FUNCTION
 
     const handleUploadEdit = (value) => {
-        // DiswikiApi.uploadWikiEditRequest(selectedDocument).
-        DiswikiApi.uploadWikiEditRequest(fileList[0]).
+        DiswikiApi.uploadWikiEditRequest(selectedDocument).
             then(res => {
                 setIsClassificationSaved(0)
                 message.success({
@@ -342,6 +342,13 @@ const DocumentResult = () => {
                         marginTop: '4vh',
                     },
                 })
+                // message.success({
+                //     content: 'Successfully upload request created',
+                //     className: 'custom-class',
+                //     style: {
+                //         marginTop: '4vh',
+                //     },
+                // })
             )
     }
     const handleSaveEdit = (value) => {
@@ -374,6 +381,13 @@ const DocumentResult = () => {
                         marginTop: '4vh',
                     },
                 })
+                // message.success({
+                //     content: 'Successfully saved',
+                //     className: 'custom-class',
+                //     style: {
+                //         marginTop: '4vh',
+                //     },
+                // })
             )
 
     }
@@ -390,7 +404,7 @@ const DocumentResult = () => {
                 <Col span={20}>
                     <Title level={2}>
                         Results
-            </Title>
+                    </Title>
                 </Col>
                 <Col span={2}>
                     {/* <Button onClick={handleClick} block>Add User</Button> */}
@@ -416,12 +430,12 @@ const DocumentResult = () => {
 
                     >
                         Save Edits
-                </Button>
+                    </Button>
                 </Col>
                 <Col span={4}>
                     <Button type="primary" onClick={handleUploadEdit} shape="round" icon={<CloudUploadOutlined />} size={'default'}>
                         Uploads to Wikibase
-                     </Button>
+                    </Button>
                 </Col>
             </Row>
             <Row gutter={[40, 0]}>

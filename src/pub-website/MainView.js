@@ -54,8 +54,6 @@ import {
     withRouter,
     useHistory
 } from "react-router-dom";
-// import SearchHome from '../components/search/SearchHome'
-import SearchResult from './SearchResult/SearchResult'
 import QASearch from './SearchResult/QASearch'
 import LoginPage from './Login/LoginPage'
 
@@ -166,23 +164,10 @@ const MainView = (props) => {
             <Switch>
                 <Route exact path={`/`}><BodyContent /> </Route>
                 <Route exact path="/login">< LoginPage /></Route>
-                {/* <Route exact path="/wiki_search">< SearchResult /></Route> */}
-                {/* <Route exact path="/wiki_search">< QASearch /></Route> */}
                 <Route exact path='/wiki_search' component={QASearch} />
             </Switch>
-
-
-            {/* <BottomNavigation
-                showLabels
-                style={{ width: '100%' }}
-            >
-            </BottomNavigation> */}
         </div >
-
-
     );
-
-
 }
 
 export default MainView;

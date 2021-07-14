@@ -10,7 +10,6 @@ import {
 import ApplicationRoutes from './ApplicationRoutes'
 import { createBrowserHistory } from "history";
 import MainView from '../pub-website/MainView'
-import SearchResult from '../pub-website/SearchResult/SearchResult'
 import LoginPage from '../pub-website/Login/LoginPage'
 import Header from "../pub-website/Header/Header";
 import BodyContent from "../pub-website/BodyContent/BodyContent";
@@ -45,7 +44,6 @@ const RootMain = (props) => (
                 <Route path='/home' component={MainView} />
                 <Route exact path='/admin' component={ApplicationRoutes} />
                 {/* <Route exact path='/login' component={LoginPage} /> */}
-                <Route exact path='/wiki_search' component={SearchResult} />
                 {/* <Route exact path="/search" component={SearchHome} /> */}
                 {/* <Route component={WithContainer} />  */}
 

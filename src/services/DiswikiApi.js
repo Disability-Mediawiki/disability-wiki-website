@@ -1,7 +1,7 @@
 import axios from 'axios';
 // import './DisWikiConfig.js'
 
-const API_HOST = process.env.REACT_APP_DISWIKI_API_URL;
+const API_HOST = process.env.REACT_APP_LOCAL_API_URL;
 
 class DiswikiApi {
 
@@ -117,6 +117,15 @@ class DiswikiApi {
             {
                 params: payload, headers
             })
+    }
+
+
+    // TRAINING DATA API
+    getTrainginData() {
+        const headers = {
+            'Authorization': `Bearer ${JSON.parse(window.sessionStorage.getItem('userConfig')).auth_token}`
+        }
+        return axios.get(`${API_HOST}training/`, { headers })
     }
 }
 

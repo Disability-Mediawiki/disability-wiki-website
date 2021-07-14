@@ -177,6 +177,7 @@ const RegisterPage = (props) => {
                         inputProps={{
                             'aria-label': 'Password',
                         }}
+                        name="Password"
                         type={showPassword ? 'text' : 'password'}
                         value={password}
                         onChange={handlePasswordChange}
@@ -196,9 +197,9 @@ const RegisterPage = (props) => {
                         placeholder="Confirm Password"
                         id="standard-adornment-password"
                         style={{ marginTop: '1rem', marginBottom: '1rem' }}
-
+                        name="confirmPassword"
                         inputProps={{
-                            'aria-label': 'ConfirmPassword',
+                            'aria-label': 'Confirm Password',
                         }}
                         type={showConfirmPassword ? 'text' : 'password'}
                         value={confirmPassword}
@@ -206,7 +207,7 @@ const RegisterPage = (props) => {
                         endAdornment={
                             <InputAdornment position="end">
                                 <IconButton
-                                    aria-label="toggle password visibility"
+                                    aria-label="toggle confirm password visibility"
                                     onClick={handleClickShowConfirmPassword}
                                     onMouseDown={handleClickShowConfirmPassword}
                                 >
@@ -217,7 +218,7 @@ const RegisterPage = (props) => {
                     />
                 </CardBody>
                 <CardFooter className={classes.cardFooter}>
-                    <Button simple color="primary" size="lg" onClick={handleCreateUser}>
+                    <Button aria-label="Create user" simple color="primary" size="lg" onClick={handleCreateUser}>
                         Create User
                     </Button>
                 </CardFooter>

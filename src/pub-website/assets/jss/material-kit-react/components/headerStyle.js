@@ -62,8 +62,8 @@ const headerStyle = {
     // background: '-webkit-linear-gradient(#ffffff, #7373f2, #ededed)',
     // webkitBackgroundClip: ' text',
     // webkitTextFillColor: 'transparent',
-    padding: "10px 16px",
-    marginLeft: "-7rem",
+    // padding: "10px 16px",
+    marginLeft: "-2rem",
     marginRight: "-10rem",
     letterSpacing: "unset",
     "&:hover,&:focus": {

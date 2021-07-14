@@ -1,6 +1,8 @@
+import React, { useState, createRef, useEffect } from "react";
 import Box from '@material-ui/core/Box';
 import IconButton from '@material-ui/core/IconButton';
 import Input from '@material-ui/core/Input';
+
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from "@material-ui/core/styles";
@@ -12,7 +14,7 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import { message } from 'antd';
 import PropTypes from 'prop-types';
-import React, { useState } from "react";
+
 // @material-ui/core components
 import { useHistory } from "react-router-dom";
 import AuthService from '../../services/AuthService';
@@ -59,20 +61,22 @@ TabPanel.propTypes = {
 
 
 const LoginPage = (props) => {
-  const [cardAnimaton, setCardAnimation] = React.useState("cardHidden");
+  const [cardAnimaton, setCardAnimation] = useState("cardHidden");
 
   const [userName, setUserName] = useState('')
   const [password, setPassword] = useState('')
   const [tabValue, setTabValue] = useState(0)
   const [showPassword, setShowPassword] = useState(false)
-
+  const userNameInput = createRef()
   let history = useHistory();
   setTimeout(function () {
     setCardAnimation("");
   }, 700);
   const classes = useStyles();
   const { ...rest } = props;
-
+  useEffect(() => {
+    userNameInput.current.children[0].focus();
+  }, []);
   const loginAlert = (type, msg) => {
     if (type === 'success') {
       message.success({
@@ -121,6 +125,7 @@ const LoginPage = (props) => {
     }
   }
   const handleLoginClick = (e) => {
+    e.preventDefault();
     if (userName && password) {
       AuthService.login_dis_wiki(userName, password)
         .then(res => {
@@ -133,7 +138,6 @@ const LoginPage = (props) => {
 
         })
         .catch(err => {
-          debugger
           if (err.response && err.response.status === 401)
             loginAlert("not-found")
           else
@@ -164,10 +168,10 @@ const LoginPage = (props) => {
   return (
     <div>
       <div
+        role="img"
+        aria-label="people with needs celebrating"
         className={classes.pageHeader}
         style={{
-          // backgroundImage: '/img/blog-work-dis.png',
-          // backgroundImage: "url(/img/blog-work-dis.png)",
           backgroundImage: "url(/img/3715.jpg)",
           backgroundSize: "cover",
           backgroundPosition: "top center"
@@ -182,27 +186,28 @@ const LoginPage = (props) => {
                   indicatorColor="primary"
                   textColor="primary"
                   onChange={handleTabChange}
-                  aria-label="disabled tabs example"
+                  aria-label="login and register user tabs"
                 >
-                  <Tab label="Login" />
-                  <Tab label="Create" />
+                  <Tab label="Login" aria-label="login tab" />
+                  <Tab label="Create" aria-label="create user tab" />
                 </Tabs>
               </Paper>
               <TabPanel value={tabValue} index={0}>
                 <Card className={classes[cardAnimaton]}>
-                  <form className={classes.form}>
+                  <form className={classes.form} onSubmit={handleLoginClick}>
                     <CardHeader color="primary" className={classes.cardHeader}>
                       <h2>Login</h2>
 
                     </CardHeader>
                     <p className={classes.divider}>Disability Wiki Login</p>
                     <CardBody>
-
                       <Input
                         inputProps={{
-                          'aria-label': 'Username',
+                          'aria-label': 'email',
                         }}
                         type='email'
+                        name="email"
+                        ref={userNameInput}
                         style={{ marginTop: '1rem' }}
                         placeholder="Email"
                         value={userName}
@@ -220,7 +225,7 @@ const LoginPage = (props) => {
                         placeholder="Password"
                         id="standard-adornment-password"
                         style={{ marginTop: '2rem', marginBottom: '1rem' }}
-
+                        name="Password"
                         inputProps={{
                           'aria-label': 'Password',
                         }}
@@ -230,7 +235,7 @@ const LoginPage = (props) => {
                         endAdornment={
                           <InputAdornment position="end">
                             <IconButton
-                              aria-label="toggle password visibility"
+                              aria-label="toggle password visibility button"
                               onClick={handleClickShowPassword}
                               onMouseDown={handleClickShowPassword}
                             >
@@ -239,19 +244,16 @@ const LoginPage = (props) => {
                           </InputAdornment>
                         }
                       />
-
                     </CardBody>
                     <CardFooter className={classes.cardFooter}>
-                      <Button simple color="primary" size="lg" onClick={handleLoginClick}>
+                      <Button simple color="primary" size="lg" aria-label="login" type="submit">
                         Login
-                    </Button>
-                      <Button simple color="primary" size="lg" onClick={handleForgotPasswordClick}>
+                      </Button>
+                      <Button simple color="primary" size="lg" aria-label="forgot password" onClick={handleForgotPasswordClick}>
                         Forgot password
-                    </Button>
+                      </Button>
                     </CardFooter>
                   </form>
-
-
                 </Card>
               </TabPanel>
               <TabPanel value={tabValue} index={1}>

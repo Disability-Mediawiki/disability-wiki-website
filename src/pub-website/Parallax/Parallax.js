@@ -45,12 +45,15 @@ export default function Parallax(props) {
   });
   return (
     <div
+      role="img"
+      aria-label="people with needs are celebrating"
       className={parallaxClasses}
       style={{
         ...style,
         backgroundImage: "url(" + image + ")",
         transform: transform
       }}
+
     >
       {children}
     </div>

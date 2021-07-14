@@ -1,5 +1,5 @@
 /*eslint-disable*/
-import React from "react";
+import React, { Fragment } from "react";
 import { useHistory, useRouteMatch } from "react-router-dom";
 
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -49,114 +49,42 @@ export default function HeaderLinks(props) {
           color="transparent"
           className={classes.navLink}
           onClick={handleHomeClick}
+          aria-label="home navigation link"
         >
           <HomeIcon className={classes.icons} /> Home
         </Button>
       </ListItem>
       <ListItem className={classes.listItem}>
       </ListItem>
-      {/* <ListItem className={classes.listItem}>
-        <CustomDropdown
-          noLiPadding
-          buttonText="Explore"
-          buttonProps={{
-            className: classes.navLink,
-            color: "transparent"
-          }}
-          buttonIcon={Apps}
-          dropdownList={[
-            <Link to="/" className={classes.dropdownLink}>
-              Documents
-            </Link>,
-            <Link to="/" className={classes.dropdownLink}>
-              Countries
-            </Link>,
-            <a
-              href="#"
-              target="_blank"
-              className={classes.dropdownLink}
-            >
-              Conventions
-            </a>
-          ]}
-        />
-      </ListItem> */}
 
       <ListItem className={classes.listItem}>
-        <Tooltip
-          id="instagram-twitter"
-          title="Follow us on twitter"
-          placement={window.innerWidth > 959 ? "top" : "left"}
-          classes={{ tooltip: classes.tooltip }}
-        >
-          <Button
-            href="#"
-            target="_blank"
-            color="transparent"
-            className={classes.navLink}
-          >
-            <i ><InstagramIcon /></i>
-          </Button>
-        </Tooltip>
-      </ListItem>
-      <ListItem className={classes.listItem}>
-        <Tooltip
-          id="instagram-facebook"
-          title="Follow us on facebook"
-          placement={window.innerWidth > 959 ? "top" : "left"}
-          classes={{ tooltip: classes.tooltip }}
-        >
+        <Fragment>
           <Button
             color="transparent"
-            href="#"
-            target="_blank"
             className={classes.navLink}
+            aria-label="search navigation link"
           >
-            <i><FacebookIcon /></i>
+            <Link to="/wiki_search" color="transparent">
+              <SearchIcon className={classes.icons} />
+              Search
+            </Link>
           </Button>
-        </Tooltip>
-      </ListItem>
-      <ListItem className={classes.listItem}>
-        <Tooltip
-          id="instagram-tooltip"
-          title="Follow us on instagram"
-          placement={window.innerWidth > 959 ? "top" : "left"}
-          classes={{ tooltip: classes.tooltip }}
-        >
-          <Button
-            color="transparent"
-            href="#"
-            target="_blank"
-            className={classes.navLink}
-          >
-            <i><TwitterIcon /></i>
-          </Button>
-        </Tooltip>
+        </Fragment>
       </ListItem>
       <ListItem className={classes.listItem}>
         <Button
           color="transparent"
           className={classes.navLink}
-        >
-          <Link to="/wiki_search" color="transparent">
-            <SearchIcon className={classes.icons} />
-            Search
-        </Link>
-        </Button>
-      </ListItem>
-      <ListItem className={classes.listItem}>
-        <Button
-          color="transparent"
-          className={classes.navLink}
+          aria-label="login navigation link"
         >
           <Link to={`/login`} color="transparent">
             <AccountCircleIcon className={classes.icons} />
             Login
-            </Link>
+          </Link>
         </Button>
       </ListItem>
       <ListItem className={classes.listItem}>
-        <Select defaultValue="en" style={{ width: 60, marginTop: '0.5rem', marginLeft: '0.5rem' }} onChange={onLangChange}>
+        <Select defaultValue="en" aria-label="language select box" style={{ width: 60, marginTop: '0.5rem', marginLeft: '0.5rem' }} onChange={onLangChange}>
           <Option value="en">EN</Option>
           <Option value="fr">FR</Option>
         </Select>

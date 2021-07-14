@@ -56,6 +56,21 @@ class QAService {
             // headers: { "Authorization": `Bearer ${token2}` }
         });
     }
+
+    getEntityProperty(uri) {
+
+        let params = {
+            'entity': uri,
+            'language': 'en',
+            'topK': 5,
+            'user': 'dhayanthdharma'
+        };
+        let dataset = 'test'
+        return axios.get(`${API_HOST}summaserver/${dataset}?`, {
+            params: params
+        });
+    }
+
     test(keyword) {
         let params = {
             'keyword': keyword

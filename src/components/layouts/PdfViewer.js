@@ -7,7 +7,7 @@ import classes from './assets/PdfViewer.css';
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 const style = { padding: '8px 0' };
-
+const API_HOST = process.env.REACT_APP_LOCAL_API_URL;
 export default function PdfViewer(props) {
     const [numPages, setNumPages] = useState(null);
     const [pageNumber, setPageNumber] = useState(1);
@@ -49,7 +49,7 @@ export default function PdfViewer(props) {
             <Document
                 file={{
                     // url: `http://localhost:5000/api/file/showfile?file_name=${props.file_name}`,
-                    url: `http://disabilityrightcore.univ-st-etienne.fr/api/file/showfile?file_name=${props.file_name}`,
+                    url: `${API_HOST}file/showfile?file_name=${props.file_name}`,
 
 
                     // url: `http://localhost:5000/api/file/text-document-search?file_name=Cover%20letter.pdf&text=Dear%20Hiring%20Manager`,

@@ -1,5 +1,5 @@
 // import { Typography } from 'antd';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, createRef } from 'react';
 import { useHistory } from 'react-router';
 import classNames from "classnames";
 
@@ -16,6 +16,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import FilledInput from '@material-ui/core/FilledInput';
 import Grid from '@material-ui/core/Grid';
+import { Row, Col } from 'antd';
 import { Typography } from '@material-ui/core';
 import styles from "../assets/jss/material-kit-react/views/components.js";
 
@@ -29,14 +30,6 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 // LIST
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/Inbox';
-import DraftsIcon from '@material-ui/icons/Drafts';
-import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
-import PublicIcon from '@material-ui/icons/Public';
-import GavelIcon from '@material-ui/icons/Gavel';
-import PlaceIcon from '@material-ui/icons/Place';
 import GroupIcon from '@material-ui/icons/Group';
 import AccessibleForwardIcon from '@material-ui/icons/AccessibleForward';
 
@@ -50,8 +43,9 @@ const { Title } = Typography;
 const searchStyle = makeStyles((theme) => ({
     root: {
         padding: '12px ',
-        marginLeft: '8rem',
+        // marginLeft: '8rem',
         display: 'flex',
+        textAlign: 'center',
         alignItems: 'center',
         width: '80%',
 
@@ -106,6 +100,7 @@ const searchStyle = makeStyles((theme) => ({
 
 }));
 const useStyles = makeStyles(styles);
+const searchInput = createRef();
 const BodyContent = (props) => {
     const classes = useStyles();
     const searchCssClass = searchStyle();
@@ -115,10 +110,10 @@ const BodyContent = (props) => {
     const [landingPageData, setLandingPageData] = useState({})
     const [textValues, setTextValues] = useState({ 'keyword': '', 'search': '' })
     useEffect(() => {
+        searchInput.current.children[0].focus();
     }, []);
 
     const handleSearchClick = (event) => {
-
         if (textValues.search) {
             history.push({
                 pathname: '/wiki_search',
@@ -126,16 +121,26 @@ const BodyContent = (props) => {
             })
         }
     }
+    const handleOnKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            if (textValues.search) {
+                history.push({
+                    pathname: '/wiki_search',
+                    state: { 'keyword': textValues.search }
+                })
+            }
+        }
+    }
     const handleChange = (event) => {
         setTextValues({ 'search': event.target.value })
+    }
+    const handleMouseDownPassword = (e) => {
+
     }
     return (
 
         <div>
-            {/* <Parallax image={require("./assets/img/bg4.jpg")}> */}
-            {/* <Parallax image='/img/blog-work-dis.png'> */}
             <Parallax image='/img/3715.jpg'>
-
                 <div className={classes.container}>
                     <GridContainer>
                         <GridItem>
@@ -155,24 +160,25 @@ const BodyContent = (props) => {
             <div className={classNames(classes.main, classes.mainRaised)}>
                 <Typography variant="h4" style={{ fontFamily: 'Roboto', paddingTop: '2rem' }} gutterBottom>
                     Explore the disability rights, conventions and different topics about disability rights based on different countries
-
                 </Typography>
-
-                <Paper component="form" className={searchCssClass.root} >
-
+                <Paper component="form" style={{ textAlign: 'center', width: '80%', display: 'inline-block', verticalAlign: ' middle' }} >
                     <FilledInput
                         style={{ width: '100%', backgroundColor: 'white' }}
                         id="standard-adornment-password"
                         type='text'
+                        name="search"
                         placeholder="Search Documents, Places, Concepts"
                         value={textValues.search}
                         onChange={handleChange}
+                        onClick={handleSearchClick}
+                        onKeyDown={handleOnKeyDown}
+                        ref={searchInput}
                         endAdornment={
                             <InputAdornment position="end">
                                 <IconButton
-                                    aria-label="toggle password visibility"
+                                    aria-label="search disability wiki"
                                     onClick={handleSearchClick}
-                                // onMouseDown={handleMouseDownPassword}
+                                    onMouseDown={handleMouseDownPassword}
                                 >
                                     <SearchIcon />
                                 </IconButton>
@@ -180,13 +186,10 @@ const BodyContent = (props) => {
                         }
                     />
                 </Paper>
-
-
-
                 <Divider style={{ marginTop: "1rem" }} />
                 <div style={{ paddingTop: '3rem' }}>
-                    <Grid container spacing={3}>
-                        <Grid item xs={3}>
+                    <Row>
+                        <Col xs={24} xl={6}>
                             <div style={{ paddingLeft: '1rem', }}>
                                 <Card className={classes.aboutCardRoot} style={{ height: '27rem' }}>
                                     <CardActionArea>
@@ -199,17 +202,17 @@ const BodyContent = (props) => {
                                             <TrackChangesIcon style={{ fontSize: '5rem' }} />
                                             <Typography gutterBottom variant="h4" component="h2">
                                                 About
-                                        </Typography>
+                                            </Typography>
                                             <Typography variant="h6" color="textPrimary" >
-                                                The data behind this project is Free, Open-source linked data that is mainted in MediaWiki Project,
-                                                Promote the rights and information about disability rights and related articles based on different regions
-                                        </Typography>
+                                                The data behind this project is free, open-source linked data that is mainted in Wikibase Project.
+                                                It promotes information about disability rights.
+                                            </Typography>
                                         </CardContent>
                                     </CardActionArea>
                                 </Card>
                             </div>
-                        </Grid>
-                        <Grid item xs={3}>
+                        </Col>
+                        <Col xs={24} xl={6}>
                             <div >
                                 <Card className={classes.aboutCardRoot} style={{ height: '27rem' }}>
                                     <CardActionArea>
@@ -217,19 +220,18 @@ const BodyContent = (props) => {
                                             <AccessibleForwardIcon style={{ fontSize: '5rem' }} />
                                             <Typography gutterBottom variant="h4" component="h2">
                                                 Motivation
-                                        </Typography>
+                                            </Typography>
                                             <Typography variant="h6" color="textPrimary" >
-                                                Human rights monitoring for people with disabilities is in urgent need
-                                                Our aim is to use a Wikibase for editing, integrating and storing structured disability related data
-                                                Includes deliberation between content experts in critical disability and health informatics and computer science professionals
+                                                Human rights monitoring for people with disabilities is in urgent need.
+                                                We use a Wikibase for editing, integrating and storing structured disability related data. It includes deliberation between experts in critical disability and health informatics.
 
-                                        </Typography>
+                                            </Typography>
                                         </CardContent>
                                     </CardActionArea>
                                 </Card>
                             </div>
-                        </Grid>
-                        <Grid item xs={3}>
+                        </Col>
+                        <Col xs={24} xl={6}>
                             <div>
                                 <Card className={classes.aboutCardRoot} style={{ height: '27rem' }}>
                                     <CardActionArea>
@@ -237,16 +239,16 @@ const BodyContent = (props) => {
                                             <FundProjectionScreenOutlined style={{ fontSize: '5rem' }} />
                                             <Typography gutterBottom variant="h4" component="h2">
                                                 Project
-                                        </Typography>
+                                            </Typography>
                                             <Typography variant="h6" color="textPrimary" >
-                                                Promote the convention and information about disability rights and related articles based on different regions
-                                        </Typography>
+                                                Promote the convention and information about disability rights and articles relating experiences from different countries.
+                                            </Typography>
                                         </CardContent>
                                     </CardActionArea>
                                 </Card>
                             </div>
-                        </Grid>
-                        <Grid item xs={3}>
+                        </Col>
+                        <Col xs={24} xl={6}>
                             <div >
                                 <Card className={classes.aboutCardRoot} style={{ marginRight: '1rem', height: '27rem' }}>
                                     <CardActionArea>
@@ -254,74 +256,59 @@ const BodyContent = (props) => {
                                             <GroupIcon style={{ fontSize: '5rem' }} />
                                             <Typography gutterBottom variant="h4" component="h2">
                                                 Team
-                                        </Typography>
+                                            </Typography>
                                             <Typography variant="h6" color="textPrimary" >
-                                                French-Canadian project with contribution of York University (Canada), University Jean Monnet (France) and QA-Company (France)
-                                        </Typography>
+                                                French-Canadian project with contribution of York University (Canada), University Jean Monnet (France) and The QA Company (France)
+                                            </Typography>
                                         </CardContent>
                                     </CardActionArea>
                                 </Card>
                             </div>
-                        </Grid>
-                    </Grid>
+                        </Col>
+                    </Row>
                 </div>
-
-
             </div>
             <Divider style={{ marginTop: '3rem' }} />
             <div style={{ backgroundColor: '#e8eaed' }}>
-                <Grid container spacing={3} style={{ paddingTop: '3rem' }}>
-                    <Grid item xs={1}></Grid>
-                    <Grid item xs={3} style={{ paddingLeft: '3rem' }}>
+                <Row>
+                    <Col xs={24} xl={8}>
                         <Paper elevation={3}  >
-                            <Card className={searchCssClass.card.root} style={{ height: '4rem' }}>
+                            <Card className={searchCssClass.card.root} style={{ height: '8rem' }}>
                                 <CardActionArea>
                                     <CardContent>
-                                        <img style={{ height: '3rem' }} src='/img/yu-logo.png' />
-                                        {/* <Typography gutterBottom variant="h5" component="h2">
-                                            York Univesrity
-                                     </Typography> */}
+                                        <img style={{ height: '5rem', width: '16rem' }} src='/img/qa company.PNG' />
                                     </CardContent>
                                 </CardActionArea>
                             </Card>
-
                         </Paper>
-
-                    </Grid>
-                    <Grid item xs={3}>
+                    </Col>
+                    <Col xs={24} xl={8}>
                         <Paper elevation={3}  >
-                            <Card className={searchCssClass.card.root} style={{ height: '4rem' }}>
+                            <Card className={searchCssClass.card.root} style={{ height: '8rem', }}>
                                 <CardActionArea>
                                     <CardContent>
-                                        <img style={{ height: '3rem' }} src='/img/use-logo.png' />
-                                        {/* <Typography gutterBottom variant="h5" component="h2">
-                                            York Univesrity
-                                     </Typography> */}
+                                        <img style={{ height: '5rem' }} src='/img/use-logo.png' />
                                     </CardContent>
                                 </CardActionArea>
                             </Card>
-
                         </Paper>
-
-                    </Grid>
-                    <Grid item xs={3}>
+                    </Col>
+                    <Col xs={24} xl={8}>
                         <Paper elevation={3}  >
-                            <Card className={searchCssClass.card.root} style={{ height: '4rem' }}>
+                            <Card className={searchCssClass.card.root} style={{ height: '8rem' }}>
                                 <CardActionArea>
                                     <CardContent>
-                                        <img style={{ height: '3rem', width: '8rem' }} src='/img/qa-logo.png' />
-                                        {/* <Typography gutterBottom variant="h5" component="h2">
-                                            York Univesrity
-                                     </Typography> */}
+                                        <img style={{ height: '5rem' }} src='/img/yu-logo.png' />
                                     </CardContent>
                                 </CardActionArea>
                             </Card>
-
                         </Paper>
+                    </Col>
+                </Row>
+                <div style={{ marginTop: "2rem", fontSize: 20 }}>
+                    <p>All rihgts reserved to Disability wiki project © 2021-2022 </p>
 
-                    </Grid>
-
-                </Grid>
+                </div>
             </div>
             {/* <a href="http://www.freepik.com">Designed by pch.vector / Freepik</a> */}
         </div >

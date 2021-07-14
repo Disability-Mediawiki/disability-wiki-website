@@ -10,6 +10,7 @@ import SideNav from "../components/layouts/Sidebar";
 import DocumentResult from "../components/pages/DocumentResult";
 import Documents from '../components/pages/Documents';
 import FileUpload from '../components/pages/FileUpload';
+import TrainModel from '../components/pages/TrainModel';
 import UploadRequest from '../components/pages/UploadRequest';
 import PrivateRouteAdmin from "./PrivateRouteAdmin";
 
@@ -26,7 +27,8 @@ const ApplicationRoutes = (props) => {
             setLoggedIn(true)
     }, []);
     const loggout = () => {
-
+        window.sessionStorage.clear();
+        window.location.href = "/"
     }
     const menu = () => {
         return loggedIn ?
@@ -89,10 +91,10 @@ const ApplicationRoutes = (props) => {
                                 <Space key="menu-1" direction="vertical">
                                     <a href="mailto:dhayanthdharma@gmail.com">Contact</a>
                                 </Space>,
-                                        <Space key="menu-2" direction="vertical">
+                                <Space key="menu-2" direction="vertical">
                                     <Button type="secondary" type="link">{(window.sessionStorage.getItem('userName') ? window.sessionStorage.getItem('userName') : 'Not logged in')}</Button>
                                 </Space>,
-                                        <Popover key="menu-3" placement="bottomRight" title={'Login'} content={menu} trigger="click">
+                                <Popover key="menu-3" placement="bottomRight" title={'Login'} content={menu} trigger="click">
                                     <Button shape="circle" type="primary" >
                                         <UserOutlined />
                                     </Button>
@@ -112,9 +114,9 @@ const ApplicationRoutes = (props) => {
                             <Route exact path="/admin/files"  >
                                 <DocumentResult history={props.history} />
                             </Route>
-                            <Route exact path="/admin/training"  >
+                            {/* <Route exact path="/admin/training"  >
                                 <Empty history={props.history} />
-                            </Route>
+                            </Route> */}
                             {/* <Route path="/admin/request" history={props.history} >
                                 <UploadRequest />
                             </Route> */}
@@ -122,6 +124,9 @@ const ApplicationRoutes = (props) => {
 
                             <Route exact path="/admin/upload" history={props.history} >
                                 <FileUpload />
+                            </Route>
+                            <Route exact path="/admin/training" history={props.history} >
+                                <TrainModel />
                             </Route>
                             <Route exact path="/admin" history={props.history} >
                                 <Documents />

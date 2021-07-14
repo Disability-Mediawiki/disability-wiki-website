@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
         color: theme.palette.text.secondary,
     },
 }));
-
+const API_HOST = process.env.REACT_APP_LOCAL_API_URL;
 const Documents = () => {
     const classes = useStyles();
     const history = useHistory();
@@ -106,7 +106,7 @@ const Documents = () => {
                     {/* <Button shape="circle" style={{ color: "red" }} icon={<CloudDownloadOutlined key={record.id + "download"} />} >
                         <a href={`http://localhost:5000/api/file/download-document?file_name=${record.name}`}></a>
                     </Button> */}
-                    <Link style={{ marginLeft: '1rem', marginTop: '0.4rem' }} href={`http://qanswer-core1.univ-st-etienne.fr/api/file/download-document?file_name=${record.name}`} onClick={e => { }} target="_blank"  >
+                    <Link style={{ marginLeft: '1rem', marginTop: '0.4rem' }} href={`${API_HOST}file/download-document?file_name=${record.name}`} onClick={e => { }} target="_blank"  >
                         <CloudDownloadOutlined key={record.id + "download"} />
                     </Link>
                     {/* <Routinglink style={{ marginLeft: '1rem', marginTop: '0.4rem' }} to={`http://localhost:5000/api/file/download-document?file_name=${record.name}`} target="_blank"><CloudDownloadOutlined key={record.id + "download"} /></Routinglink> */}
