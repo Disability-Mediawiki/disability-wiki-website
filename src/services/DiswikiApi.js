@@ -1,7 +1,8 @@
 import axios from 'axios';
 // import './DisWikiConfig.js'
 
-const API_HOST = process.env.REACT_APP_LOCAL_API_URL;
+// const API_HOST = process.env.REACT_APP_LOCAL_API_URL;
+const API_HOST = process.env.REACT_APP_DISWIKI_API_URL;
 
 class DiswikiApi {
 
@@ -55,6 +56,7 @@ class DiswikiApi {
         }
         return axios.get(`${API_HOST}file/get-pending-document`, config)
     }
+
     donwloadDocument(fileName) {
         const config = {
             headers: {
@@ -100,13 +102,13 @@ class DiswikiApi {
         }
         return axios.get(`${API_HOST}request/get-pending-request`, config)
     }
-    getClassificationViewResult(doc_name) {
+    getClassificationViewResult(document) {
         const headers = {
             'Authorization': `Bearer ${JSON.parse(window.sessionStorage.getItem('userConfig')).auth_token}`
         }
         return axios.get(`${API_HOST}doc-classifiy/view-result`,
             {
-                params: { 'file_name': doc_name }, headers
+                params: { 'document_name': document.document_name, 'id': document.document_id, }, headers
             })
     }
     updateUploadRequest(payload) {

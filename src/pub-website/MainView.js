@@ -1,63 +1,23 @@
-// import { Typography } from 'antd';
-import React, { useEffect, useState } from 'react';
-// import { useHistory } from 'react-router';
-// import { useRouteMatch } from 'react-router';
-
-import classNames from "classnames";
-import Header from "./Header/Header";
-import BodyContent from "./BodyContent/BodyContent";
-import HeaderLinks from "./Header/HeaderLinks";
-import Parallax from "./Parallax/Parallax.js";
-import GridContainer from "./Grid/GridContainer.js";
-import GridItem from "./Grid/GridItem.js";
-import { makeStyles } from "@material-ui/core/styles";
-import Divider from '@material-ui/core/Divider';
-import Paper from '@material-ui/core/Paper';
-import InputBase from '@material-ui/core/InputBase';
-import IconButton from '@material-ui/core/IconButton';
-import Button from '@material-ui/core/Button';
-import SearchIcon from '@material-ui/icons/Search';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import FilledInput from '@material-ui/core/FilledInput';
-import Grid from '@material-ui/core/Grid';
-import { Typography } from '@material-ui/core';
-import styles from "./assets/jss/material-kit-react/views/components.js";
-
-// CARD
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import CardActionArea from '@material-ui/core/CardActionArea';
-
-// LIST
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/Inbox';
-import DraftsIcon from '@material-ui/icons/Drafts';
-import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
-import PublicIcon from '@material-ui/icons/Public';
-import GavelIcon from '@material-ui/icons/Gavel';
-import PlaceIcon from '@material-ui/icons/Place';
-import BottomNavigation from '@material-ui/core/BottomNavigation';
-
-import {
-    BrowserRouter as Router,
-    // HashRouter as Router,
-    Switch,
-    Route,
-    useRouteMatch,
-    Link,
-    Redirect,
-    withRouter,
-    useHistory
-} from "react-router-dom";
-import QASearch from './SearchResult/QASearch'
-import LoginPage from './Login/LoginPage'
-
 import '@fontsource/roboto';
+import { Typography } from '@material-ui/core';
+import ListItem from '@material-ui/core/ListItem';
+import { makeStyles } from "@material-ui/core/styles";
+import React, { useEffect, useState } from 'react';
+import {
+    Route,
+    // HashRouter as Router,
+    Switch, useHistory, useRouteMatch
+} from "react-router-dom";
+import styles from "./assets/jss/material-kit-react/views/components.js";
+import BodyContent from "./pages/BodyContent/BodyContent";
+import Header from "./pages/Header/Header";
+import HeaderLinks from "./pages/Header/HeaderLinks";
+import LoginPage from './pages/Login/LoginPage';
+import QASearch from './pages/SearchResult/QASearch';
+
+
+
+
 function ListItemLink(props) {
     return <ListItem button component="a" {...props} />;
 }
@@ -145,14 +105,10 @@ const MainView = (props) => {
     return (
 
         <div>
-
-
             <Header
-                // <div style={{ marginLeft: '-20rem' }}>Disability Wiki</div>
                 brand="DISABILITY WIKI"
                 rightLinks={<HeaderLinks />}
                 fixed
-
                 color={(window.location.href.split('/')[3] === "") ? "transparent" : 'white'}
                 changeColorOnScroll={{
                     height: 400,
@@ -160,7 +116,6 @@ const MainView = (props) => {
                 }}
                 {...rest}
             />
-
             <Switch>
                 <Route exact path={`/`}><BodyContent /> </Route>
                 <Route exact path="/login">< LoginPage /></Route>

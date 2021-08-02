@@ -1,54 +1,27 @@
+/*
+ROUTE CONFIG
+MAIN APPLICATION ROUTE 
+PUBLIC WEBSITE ROUTE
+*/
+import { createBrowserHistory } from "history";
 import React from "react";
 import {
-    BrowserRouter as Router,
+    BrowserRouter as Router, Route,
     // HashRouter as Router,
-    Switch,
-    Route,
-    Link,
-    Redirect
+    Switch
 } from "react-router-dom";
-import ApplicationRoutes from './ApplicationRoutes'
-import { createBrowserHistory } from "history";
-import MainView from '../pub-website/MainView'
-import LoginPage from '../pub-website/Login/LoginPage'
-import Header from "../pub-website/Header/Header";
-import BodyContent from "../pub-website/BodyContent/BodyContent";
-
-import HeaderLinks from "../pub-website/Header/HeaderLinks";
+import AdminView from '../admin-site/AdminView';
+import MainView from '../pub-website/MainView';
 
 var hist = createBrowserHistory();
 
-const WithContainer = () => (
-    // <div className="container">
-    /* Wrap routes in container div */
-
-    // </div>
-    <div>
-        {/* <Route exact path="/search" component={SearchHome} /> */}
-    </div>
-
-)
-const AdminPannel = () => (
-    // <div className="container">
-    /* Wrap routes in container div */
-
-    // </div>
-    <ApplicationRoutes />
-
-)
 const RootMain = (props) => (
 
     <main>
         <Router history={hist}>
             <Switch>
                 <Route path='/home' component={MainView} />
-                <Route exact path='/admin' component={ApplicationRoutes} />
-                {/* <Route exact path='/login' component={LoginPage} /> */}
-                {/* <Route exact path="/search" component={SearchHome} /> */}
-                {/* <Route component={WithContainer} />  */}
-
-                {/* <Redirect to="/home" from="/" /> */}
-
+                <Route exact path='/admin' component={AdminView} />
             </Switch>
         </Router>
     </main>
