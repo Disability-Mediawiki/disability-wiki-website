@@ -3,16 +3,18 @@ DOCUMENT COMPONENT
 VIEW OR DOWNLOAD ALL UPLOADED DOCUMENST AND IT'S STATUS
 */
 
-import { CloudDownloadOutlined, EyeOutlined } from '@ant-design/icons';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { makeStyles } from '@material-ui/core/styles';
+import { CloudDownloadOutlined, EyeOutlined } from '@ant-design/icons';
+import LanguageIcon from '@material-ui/icons/Language';
+import MenuBookIcon from '@material-ui/icons/MenuBook';
 import { Button, Col, Empty, message, Modal, Row, Skeleton, Table, Tooltip, Typography } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import DiswikiApi from '../../services/DiswikiApi';
 import PdfViewer from '../layouts/PdfViewer';
-
+import Chip from '@material-ui/core/Chip';
 const { Title } = Typography;
 
 const useStyles = makeStyles((theme) => ({
@@ -74,8 +76,21 @@ const Documents = () => {
             key: 'Date'
         },
         {
+            title: 'Type',
+            dataIndex: 'type',
+            key: 'doc_type',
+            render: (_, record) =>
+                tableData.length >= 1 ?
+                    renderDocumentType(record)
+                    : null,
+        },
+        {
             title: 'Status',
             dataIndex: 'status',
+            render: (_, record) =>
+                tableData.length >= 1 ?
+                    renderDocumentStatus(record)
+                    : null,
             key: 'Status'
         },
         {
@@ -106,8 +121,62 @@ const Documents = () => {
         setSelectedFile(record)
         setModalVisible(true)
     }
+    const renderDocumentStatus = (record) => {
+        if (record.status === "pending") {
+            return (<Chip
+                label={record.status}
+                clickable
+                color="secondary"
+            />)
+        }
+        else if (record.status === "classified") {
+            return (<Chip
+                label={record.status}
+                clickable
+                color="primary"
+            />)
+        }
+        else if (record.status === "rejected") {
+            return (<Chip
+                variant="outlined"
+                label={record.status}
+                clickable
+                color="secondary"
+            />)
+        }
+        else if (record.status === "completed") {
+            return (<Chip
+                label={record.status}
+                clickable
+                color="primary"
+            />)
+        }
+        else if (record.status === "requested") {
+            return (<Chip
+                variant="outlined"
+                label={record.status}
+                clickable
+                color="primary"
+            />)
+        }
+        else if (record.status === "processing") {
+            return (<Chip
+                variant="outlined"
+                label={record.status}
+                clickable
+            />)
+        }
+    }
+    const renderDocumentType = (record) => {
+        if (record.type === "document") {
+            return (<MenuBookIcon aria-label="document type icon" key={record.id + "doc_icon"} />)
+        }
+        else if (record.type === "web-content") {
+            return (<LanguageIcon aria-label="web content type icon" key={record.id + "web_content_icon"} />)
+        }
+    }
     const getActionButton = (record) => {
-        return (
+        return (record.type === 'document') ? (
             <Row key={record.id + "rowAction"}>
                 <Tooltip title="View"  >
                     <Button shape="circle"
@@ -122,7 +191,14 @@ const Documents = () => {
                         style={{ color: "blue", marginLeft: "1rem" }} icon={<CloudDownloadOutlined key={record.id + "download"} />} />
                 </Tooltip>
             </Row>
-
+        ) : (
+            <Row key={record.id + "rowAction"}>
+                <Tooltip title="View"  >
+                    <Button shape="circle"
+                        aria-label={`view web content ${record.name}`}
+                        onClick={e => window.open(record.link, '_blank')} style={{ color: "green" }} icon={<EyeOutlined key={record.id + "view"} />} />
+                </Tooltip>
+            </Row>
         )
     }
 

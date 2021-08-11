@@ -3,7 +3,7 @@ DOCUMENT CLASSIFICATION RESULT COMPONENT
 VIEW CLASSIFICATION RESULT, EDIT RESULT, MAKE UPLOAD REQUEST
 */
 
-import { CloudUploadOutlined, DownOutlined, SyncOutlined } from '@ant-design/icons';
+import { CloudUploadOutlined, DownOutlined, FileOutlined, SyncOutlined, LinkOutlined } from '@ant-design/icons';
 import Avatar from '@material-ui/core/Avatar';
 import Chip from '@material-ui/core/Chip';
 import AddBoxIcon from '@material-ui/icons/AddBox';
@@ -35,7 +35,7 @@ const DocumentResult = () => {
     const [selectedGlossary, setSelectedGlossary] = useState({});
 
     useEffect(() => {
-        // getDocumentList();
+        getDocumentList();
         getGlossaryList()
     }, []);
     const popOverContent = (record) => {
@@ -119,11 +119,13 @@ const DocumentResult = () => {
     const getFileList = () => {
         return (< Menu className="select-file-body" onClick={handleFileClick} getPopupContainer={triggerNode => triggerNode.parentNode} >{
             fileList.length > 0 ? fileList.map((item, index) => {
-                return (
-                    <Menu.Item key={item.key + "file_list"} document={item} disabled={(item.status === 'processing')}>
+                return (item.type === "document") ? (
+                    <Menu.Item icon={<FileOutlined />} key={item.key + "file_list"} document={item} disabled={(item.status === 'processing')}>
                         {item.name}
                     </Menu.Item>
-                )
+                ) : (<Menu.Item icon={<LinkOutlined />} key={item.key + "file_list"} document={item} disabled={(item.status === 'processing')}>
+                    {item.name}
+                </Menu.Item>)
             }) : <Menu.Item key={'no_file_menu_key'} disabled={true}>
                 {"NO FILE"}
             </Menu.Item>
@@ -171,16 +173,17 @@ const DocumentResult = () => {
         setTableLoading(true);
         DiswikiApi.getClassificationResult(document.name, document.id)
             .then(res => {
+                debugger
                 let tbData = []
                 if (res.status === 200) {
-                    if ('classification_id' in res.data[0]) {
+                    if ('document_id' in res.data[0]) {
                         setIsClassificationSaved(1);
                         res.data.forEach((data, index) => {
                             tbData.push({
-                                "classification_id": data.classification_id,
+                                "document_id": data.document_id,
                                 "tags": data.tag,
                                 "paragraph": data.paragraph,
-                                "key": index + "_classification_data",
+                                "key": index + "document_id",
                                 "id": data.id
                             })
                         })
@@ -211,47 +214,6 @@ const DocumentResult = () => {
             })
     }
 
-
-    const getClassifiedResults = (fileName) => {
-        if (!fileName) return;
-        DiswikiApi.getClassificationResult('CRPD.pdf')
-            .then(res => {
-                let tbData = []
-                if (res.status === 200) {
-                    if ('classification_id' in res.data[0]) {
-                        setIsClassificationSaved(1);
-                        res.data.forEach((data, index) => {
-                            tbData.push({
-                                "classification_id": data.classification_id,
-                                "tags": data.tag,
-                                "paragraph": data.paragraph,
-                                "key": index + "_classification_data",
-                                "id": data.id
-                            })
-                        })
-                    } else {
-                        setIsClassificationSaved(0);
-                        res.data.forEach((data, index) => {
-                            tbData.push({
-                                "tags": data.tag,
-                                "paragraph": data.paragraph,
-                                "key": index + "_classification_data",
-                            })
-                        })
-                    }
-                    setTableData(tbData);
-                }
-            })
-            .catch(err =>
-                message.error({
-                    content: 'Error : Please try again later',
-                    className: 'custom-class',
-                    style: {
-                        marginTop: '4vh',
-                    },
-                })
-            );
-    }
     const handleClick = () => {
         history.push('/form')
     }
@@ -267,7 +229,7 @@ const DocumentResult = () => {
     // TAG functions
 
     const handleTagDelete = (record, tag) => {
-
+        debugger
         const dataSource = [...tableData];
         let index = dataSource.indexOf(record);
         dataSource[index].tags = dataSource[index].tags.filter((item) => item !== tag)

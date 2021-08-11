@@ -7,7 +7,7 @@ import classes from './assets/PdfViewer.css';
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 const style = { padding: '8px 0' };
-const API_HOST = process.env.REACT_APP_LOCAL_API_URL;
+const API_HOST = process.env.REACT_APP_DISWIKI_API_URL;
 export default function PdfViewer(props) {
     const [numPages, setNumPages] = useState(null);
     const [pageNumber, setPageNumber] = useState(1);
@@ -39,7 +39,7 @@ export default function PdfViewer(props) {
                     <div style={style}>
                         <Button type="primary" onClick={nextPage}>
                             Next
-                    </Button>
+                        </Button>
                     </div>
                 </Col>
             </Row>
@@ -48,12 +48,7 @@ export default function PdfViewer(props) {
 
             <Document
                 file={{
-                    // url: `http://localhost:5000/api/file/showfile?file_name=${props.file_name}`,
-                    url: `${API_HOST}file/showfile?file_name=${props.file_name}`,
-
-
-                    // url: `http://localhost:5000/api/file/text-document-search?file_name=Cover%20letter.pdf&text=Dear%20Hiring%20Manager`,
-
+                    url: `${API_HOST}file/download-document?file_name=${props.file_name}`,
                     // withCredentials: true,
                     // httpHeaders: {
                     //     'Authorization': `Bearer ${JSON.parse(window.sessionStorage.getItem('userConfig')).auth_token}`

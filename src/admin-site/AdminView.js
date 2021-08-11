@@ -13,6 +13,8 @@ import SideNav from "./layouts/Sidebar";
 import DocumentResult from "./pages/DocumentResult";
 import Documents from './pages/Documents';
 import FileUpload from './pages/FileUpload';
+import WebContentUpload from './pages/WebContentUpload';
+import ContentUpload from './pages/ContentUpload';
 import TrainModel from './pages/TrainModel';
 import UploadRequest from './pages/UploadRequest';
 
@@ -113,6 +115,13 @@ const AdminView = (props) => {
                             <PrivateRouteAdmin path="/admin/request" component={UploadRequest} />
 
                             <Route exact path="/admin/upload" history={props.history} >
+                                {/* <FileUpload /> */}
+                                <ContentUpload />
+                            </Route>
+                            <Route exact path="/admin/web-upload" history={props.history} >
+                                <WebContentUpload />
+                            </Route>
+                            <Route exact path="/admin/doc-upload" history={props.history} >
                                 <FileUpload />
                             </Route>
                             <Route exact path="/admin/training" history={props.history} >

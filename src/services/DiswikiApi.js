@@ -30,6 +30,16 @@ class DiswikiApi {
         )
 
     }
+    webContentUpload(formData) {
+        const config = {
+            headers: {
+                'Authorization': `Bearer ${JSON.parse(window.sessionStorage.getItem('userConfig')).auth_token}`
+            }
+        }
+        return axios.post(`${API_HOST}web-content/upload`, formData,
+            config
+        )
+    }
     getClassificationResult(document_name, document_id) {
         const headers = {
             'Authorization': `Bearer ${JSON.parse(window.sessionStorage.getItem('userConfig')).auth_token}`
@@ -39,6 +49,7 @@ class DiswikiApi {
                 params: { 'document_name': document_name, 'document_id': document_id }, headers
             })
     }
+
     getDocumentList() {
         const config = {
             headers: {
@@ -46,6 +57,16 @@ class DiswikiApi {
             }
         }
         return axios.get(`${API_HOST}file/get-all-document`, config)
+    }
+    isDocumentNameExist(value) {
+        const headers = {
+            'Authorization': `Bearer ${JSON.parse(window.sessionStorage.getItem('userConfig')).auth_token}`
+        }
+
+        return axios.get(`${API_HOST}file/is-name-exit`,
+            {
+                params: { 'file_name': value, }, headers
+            })
     }
 
     getDocumentListPending() {
@@ -128,6 +149,17 @@ class DiswikiApi {
             'Authorization': `Bearer ${JSON.parse(window.sessionStorage.getItem('userConfig')).auth_token}`
         }
         return axios.get(`${API_HOST}training/`, { headers })
+    }
+
+    // web content upload
+    getWebContents(url) {
+        const headers = {
+            'Authorization': `Bearer ${JSON.parse(window.sessionStorage.getItem('userConfig')).auth_token}`
+        }
+        return axios.get(`${API_HOST}web-content/`,
+            {
+                params: { 'link': url }, headers
+            })
     }
 }
 

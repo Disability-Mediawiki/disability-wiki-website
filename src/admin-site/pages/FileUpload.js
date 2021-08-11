@@ -2,9 +2,9 @@
 DOCUMENT UPLOAD COMPONENT
 UPLOAD DOCUMENTS TO THE SYSTEM
 */
-import { CloudUploadOutlined, UploadOutlined } from '@ant-design/icons';
-import { Button, Col, Input, message, Row, Select, Upload } from 'antd';
+import { Button, Col, Input, message, Alert, Row, Select, Upload, Form } from 'antd';
 import React, { createRef, useEffect, useState } from 'react';
+import { CloudUploadOutlined, UploadOutlined } from '@ant-design/icons';
 import country from '../../data/country.json';
 import language from '../../data/language.json';
 import DiswikiApi from '../../services/DiswikiApi';
@@ -16,12 +16,11 @@ const FileUpload = (props) => {
     const [fileList, setFileList] = useState([])
     const [uploading, setUploading] = useState(false)
     const [selectedCountry, setSelectedCountry] = useState('')
-    const [selectedLanguage, setSelectedLanguage] = useState('')
-    const [documentName, setDocumentName] = useState('')
-    const [documentDescription, setDocumentDescription] = useState('')
+    const [isNameAlreadyExist, setIsNameAlreadyExist] = useState(false);
     const [countryList, setCountryList] = useState([])
     const [languageList, setLanguageList] = useState([])
     const documentNameInput = createRef()
+    const [form] = Form.useForm();
     useEffect(() => {
         documentNameInput.current.focus();
         getCountryList();
@@ -32,18 +31,21 @@ const FileUpload = (props) => {
     const getCountryList = () => {
         setCountryList(country);
     }
-    const handleUpload = () => {
+    const handleUpload = (value) => {
         const formData = new FormData();
         // uncomment for multi file
         // fileList.forEach(file => {
         //     formData.append('files[]', file);
         // });
         let file = fileList[0]
+        if (!file || !value || !value.documentName || !value.country || !value.language || !value.description) {
+            message.warn(`incomplete input`);
+        }
         formData.append('file', file);
-        formData.append('document_name', documentName);
-        formData.append('country', selectedCountry);
-        formData.append('language', selectedLanguage);
-        formData.append('description', documentDescription);
+        formData.append('document_name', value.documentName);
+        formData.append('country', value.country);
+        formData.append('language', value.language);
+        formData.append('description', value.description);
 
         setUploading(true)
         DiswikiApi.fileUpload(formData)
@@ -52,20 +54,15 @@ const FileUpload = (props) => {
                 message.success(`${res.data.filename} file uploaded successfully`);
                 fileList.pop()
                 setFileList([])
-                setDocumentName('')
+                form.resetFields()
             })
             .catch(err => {
                 console.log(err)
+                message.error(`Error uploading web content ${err}`);
+                form.resetFields()
                 setUploading(false)
             })
     };
-    const onChange = (value) => {
-        console.log(`selected ${value}`);
-        setSelectedCountry(value)
-    }
-    const onLangChange = (value) => {
-        setSelectedLanguage(value)
-    }
 
     const onBlur = () => {
         console.log('blur');
@@ -85,18 +82,19 @@ const FileUpload = (props) => {
             const newFileList = fileList.slice();
             newFileList.splice(index, 1);
             setFileList(newFileList)
-            setDocumentName('')
+            form.resetFields()
         },
         beforeUpload: (file) => {
             // setFileList([...fileList, file])
             setFileList([file])
-            setDocumentName(file.name.split('.')[0])
+            form.setFieldsValue({
+                documentName: file.name.split('.')[0],
+            })
             return false
         },
         fileList,
 
     };
-
     const renderCountryOption = () => {
         if (countryList.length > 0)
             countryList.map((country, index) => {
@@ -104,16 +102,49 @@ const FileUpload = (props) => {
             })
 
     }
-    const documentNameOnChange = (e) => {
 
-        setDocumentName(e.target.value)
+    const contentNameOnLeave = (e) => {
+        if (e.target.value) {
+            DiswikiApi.isDocumentNameExist(e.target.value)
+                .then(res => {
+                    if (res.data === true) {
+                        setIsNameAlreadyExist(true)
+                    } else {
+                        setIsNameAlreadyExist(false)
+                    }
+                }).catch(err => {
+                    setIsNameAlreadyExist(false)
+                    message.error({
+                        content: 'Something went wrong ',
+                        className: 'custom-class',
+                        style: {
+                            marginTop: '4vh',
+                        },
+                    });
+                })
+        }
     }
-    const documentDescriptionOnChange = (e) => {
-
-        setDocumentDescription(e.target.value)
-    }
+    const formItemLayout = {
+        labelCol: {
+            xs: { span: 24 },
+            sm: { span: 8 },
+            xl: { span: 6 },
+        },
+        wrapperCol: {
+            xs: { span: 24 },
+            sm: { span: 16 },
+            xl: { span: 18 },
+        },
+    };
     return (
         <div >
+            <Alert
+                message="IMPORTANT"
+                description="Don't upload duplicate documents. Respect the warnings.Strictly prohibit from uploading company data or other band contents. Keep the document name as simple as possible and describe it well."
+                type="warning"
+                showIcon
+                style={{ marginBottom: '0.5rem' }}
+            />
             <Dragger {...uploadProps} >
                 <p className="ant-upload-drag-icon">
                     <UploadOutlined className="focusIcon" tabIndex={0} />
@@ -121,89 +152,119 @@ const FileUpload = (props) => {
                 <p className="ant-upload-text">Click or drag file to this area to upload</p>
                 <p className="ant-upload-hint">
                     Upload the document that needs to be classified by our classifier
-                    Support for a single or bulk upload. Strictly prohibit from uploading company data or other
-                    band files
+                    Support for a single upload. Strictly prohibit from uploading company data or other
+                    band files.
                 </p>
             </Dragger>
-            <div style={{ marginTop: 16, width: '50%', marginLeft: '20%' }}>
-                <Input ref={documentNameInput} addonBefore="Document Name" aria-label="document name input" value={documentName} onChange={documentNameOnChange} defaultValue="Name" />
-            </div>
-            <div style={{ marginTop: 16, width: '50%', marginLeft: '20%' }}>
-                <Input addonBefore="Description" aria-label="document description input" value={documentDescription} onChange={documentDescriptionOnChange} defaultValue="Description" />
-            </div>
-            <div style={{ marginBottom: 16, marginTop: 16, }}>
-                <Row>
-                    <Col span={4}>
-                    </Col>
-                    <Col span={3}>
-                        <p className="ant-text">Country</p>
-                    </Col>
-                    <Col span={10}>
-                        <Select
-                            showSearch
-                            style={{ width: '80%' }}
-                            placeholder="Select a Country"
-                            optionFilterProp="children"
-                            aria-label="select country drop down menu"
-                            onChange={onChange}
-                            onFocus={onFocus}
-                            onBlur={onBlur}
-                            onSearch={onSearch}
-                            filterOption={(input, option) =>
-                                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                            }
+
+            <Row>
+                <Col xl={20} sm={22} xs={24} style={{ marginTop: '1rem' }}>
+                    <Form
+                        {...formItemLayout}
+                        form={form}
+                        name="upload web content form"
+                        onFinish={handleUpload}
+                        scrollToFirstError
+                    >
+                        <Form.Item
+                            name="documentName"
+                            label="Name"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Please input content name!',
+                                }, {
+                                    validator: (_, value) =>
+                                        isNameAlreadyExist ? Promise.reject(new Error('Name already exist')) : Promise.resolve(),
+                                },
+                            ]}
                         >
-                            {
-                                (countryList.length > 0) ?
-                                    countryList.map((country, index) => (
-                                        <Option key={country.Code} value={country.Code}>{country.Name}</Option>
-                                    )) : null
-                            }
-                        </Select>
-                    </Col>
-                </Row>
-            </div>
-            <div style={{ marginBottom: 16, marginTop: 16, }}>
-                <Row>
-                    <Col span={4}>
-                    </Col>
-                    <Col span={3}>
-                        <p className="ant-text">Language</p>
-                    </Col>
-                    <Col span={10}>
-                        <Select
-                            showSearch
-                            style={{ width: '80%' }}
-                            placeholder="Select document language"
-                            aria-label="select language drop down menu"
-                            optionFilterProp="children"
-                            onChange={onLangChange}
-                            onFocus={e => { }}
-                            onBlur={e => { }}
-                            onSearch={e => { }}
-                            filterOption={(input, option) =>
-                                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                            }
+                            <Input ref={documentNameInput} aria-label="web content name input" placeholder="Blog post" onBlur={contentNameOnLeave} />
+                        </Form.Item>
+                        <Form.Item
+                            name="description"
+                            label="Description"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Please input content description!',
+                                },
+                            ]}
                         >
-                            {
-                                (languageList.length > 0) ?
-                                    languageList.map((lang, index) => (
-                                        <Option key={lang.code} value={lang.code}>{lang.name}</Option>
-                                    )) : null
-                            }
-                        </Select>
-                    </Col>
-                </Row>
-            </div>
-            <Button type="primary" onClick={handleUpload}
-                disabled={fileList.length === 0}
-                loading={uploading}
-                aria-label="upload file button"
-                style={{ marginTop: 16 }}
-                shape="round" icon={<CloudUploadOutlined />} size={'default'}>
-                {uploading ? 'Uploading' : 'Start Upload'}
-            </Button>
-        </div>
+                            <Input aria-label="Content description input" placeholder="Description" />
+                        </Form.Item>
+                        <Form.Item
+                            name="country"
+                            label="Country"
+                            rules={[
+                                {
+                                    required: true,
+                                    message: 'Please select content country!',
+                                },
+                            ]}
+                        >
+                            <Select
+                                showSearch
+                                style={{ width: '100%' }}
+                                placeholder="Select a Country"
+                                optionFilterProp="children"
+                                aria-label="select country drop down menu"
+                                filterOption={(input, option) =>
+                                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                }
+                            >
+                                {
+                                    (countryList.length > 0) ?
+                                        countryList.map((country, index) => (
+                                            <Option key={country.Code} value={country.Code}>{country.Name}</Option>
+                                        )) : null
+                                }
+                            </Select>
+                        </Form.Item>
+                        <Form.Item
+                            name="language"
+                            label="Language"
+                            rules={[{ required: true, message: 'Please select gender!' }]}
+                        >
+                            <Select
+                                showSearch
+                                placeholder="Select document language"
+                                aria-label="select language drop down menu"
+                                optionFilterProp="children"
+                                onFocus={e => { }}
+                                onBlur={e => { }}
+                                onSearch={e => { }}
+                                filterOption={(input, option) =>
+                                    option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                                }
+                            >
+                                {
+                                    (languageList.length > 0) ?
+                                        languageList.map((lang, index) => (
+                                            <Option key={lang.code} value={lang.code}>{lang.name}</Option>
+                                        )) : null
+                                }
+                            </Select>
+                        </Form.Item>
+                        <Row>
+                            <Col xl={4} sm={3} xs={0} ></Col>
+                            <Col xl={20} sm={21} xs={24} >
+                                <Button type="primary"
+                                    htmlType="submit"
+                                    disabled={(fileList.length === 0)}
+                                    loading={uploading}
+                                    style={{ width: '100%', marginTop: '0.3rem' }}
+                                    aria-label="upload file button"
+                                    shape="round" icon={<CloudUploadOutlined />} size={'default'}>
+                                    {uploading ? 'Uploading' : 'Start Upload'}
+                                </Button>
+                            </Col>
+                        </Row>
+
+                    </Form>
+                </Col>
+            </Row>
+        </div >
     );
 }
 
