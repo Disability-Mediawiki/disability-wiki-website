@@ -195,12 +195,27 @@ const UploadRequest = () => {
                 'document_id': record.document_id,
                 'status': 'rejected',
             }
+            setIsUploading(true)
             DiswikiApi.updateUploadRequest(payload)
                 .then((res) => {
-                    console.log(res)
+                    message.success({
+                        content: 'Action updated successfully',
+                        className: 'custom-class',
+                        style: {
+                            marginTop: '4vh',
+                        },
+                    });
+                    setIsUploading(false)
                 })
                 .catch((err) => {
-                    console.log(err)
+                    message.error({
+                        content: 'Internal error : ' + err,
+                        className: 'custom-class',
+                        style: {
+                            marginTop: '4vh',
+                        },
+                    })
+                    setIsUploading(false)
                 })
         }
     }
@@ -215,7 +230,7 @@ const UploadRequest = () => {
                     <Button shape="circle" onClick={e => onApprove(record)} style={{ color: "green", marginLeft: '0.5rem' }} icon={<CheckCircleOutlined />} />
                 </Tooltip>
                 {/* <Tooltip title="Delete" style={{ marginLeft: "3rem" }} color={'red'} visible={true} onVisibleChange={e => console.log('')} > */}
-                <Popconfirm title="Sure to delete?" onConfirm={() => console.log(record)} >
+                <Popconfirm title="Sure to delete?" onConfirm={() => onReject(record)} >
                     <Button shape="circle" style={{ color: "red", marginLeft: '0.5rem' }} icon={<CloseCircleOutlined />} />
                 </Popconfirm>
                 {/* </Tooltip> */}

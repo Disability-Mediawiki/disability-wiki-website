@@ -144,6 +144,14 @@ const Documents = () => {
                 color="secondary"
             />)
         }
+        else if (record.status === "deleted") {
+            return (<Chip
+                variant="outlined"
+                label={record.status}
+                clickable
+                color="secondary"
+            />)
+        }
         else if (record.status === "completed") {
             return (<Chip
                 label={record.status}
