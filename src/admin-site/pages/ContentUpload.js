@@ -56,7 +56,7 @@ const ContentUpload = (props) => {
                             <CardContent style={{ textAlign: 'center' }}>
                                 <LanguageIcon style={{ fontSize: '5rem' }} />
                                 <Typography gutterBottom variant="h4" component="h2">
-                                    BLOCK POST
+                                    WEB CONTENT
                                 </Typography>
                                 <Typography variant="h6" color="textPrimary" >
                                     Extract contents directly from a blog post or a website
