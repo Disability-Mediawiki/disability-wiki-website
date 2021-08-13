@@ -94,14 +94,9 @@ const WebContentUpload = (props) => {
         setParagraphs(newParagraphs)
     }
     const handleUpload = (value) => {
-        debugger
-        console.log(form)
-
         if (!value.documentName || !value.country || !value.language || !value.description) {
             return;
         }
-
-        return
         setUploading(true)
         let doc = {
             'document_name': value.documentName,
