@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
         color: theme.palette.text.secondary,
     },
 }));
-const API_HOST = process.env.REACT_APP_LOCAL_API_URL;
+const API_HOST = process.env.REACT_APP_DISWIKI_API_URL;
 const Documents = () => {
     const classes = useStyles();
     const history = useHistory();
